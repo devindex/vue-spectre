@@ -7,8 +7,16 @@
         :options="item1.options"
       >
         <template slot="action">
-          <button class="btn btn-primary input-group-btn" @click="item1.value = null">
+          <button
+            class="btn btn-primary btn-action input-group-btn"
+            @click="item1.value = null"
+            v-if="item1.value">
             <i class="icon icon-cross"></i>
+          </button>
+          <button
+            class="btn btn-primary btn-action input-group-btn"
+            v-else>
+            <i class="icon icon-search"></i>
           </button>
         </template>
       </dx-autocomplete>
@@ -27,8 +35,16 @@
         track-by="id"
       >
         <template slot="action">
-          <button class="btn btn-primary input-group-btn" @click="item2.value = null">
+          <button
+            class="btn btn-primary btn-action input-group-btn"
+            @click="item2.value = null"
+            v-if="item2.value">
             <i class="icon icon-cross"></i>
+          </button>
+          <button
+            class="btn btn-primary btn-action input-group-btn"
+            v-else>
+            <i class="icon icon-search"></i>
           </button>
         </template>
       </dx-autocomplete>
@@ -45,14 +61,21 @@
         :options="item3.options"
         label="title"
         track-by="id"
-        @blur="item3.options = []"
         :loading="item3.loading"
-        :highlight="true"
+        :highlight="false"
         @search-change="updateItems"
       >
         <template slot="action">
-          <button class="btn btn-primary input-group-btn" @click="item3.value = null">
+          <button
+            class="btn btn-primary btn-action input-group-btn"
+            @click="item3.value = null"
+            v-if="item3.value">
             <i class="icon icon-cross"></i>
+          </button>
+          <button
+            class="btn btn-primary btn-action input-group-btn"
+            v-else>
+            <i class="icon icon-search"></i>
           </button>
         </template>
       </dx-autocomplete>
