@@ -114,6 +114,7 @@
         cursor: -1,
         direction: '',
         timeout: null,
+        keepSearch: false,
       }
     },
     created() {
@@ -151,6 +152,7 @@
       onInput() {
         this.cursor = -1;
         this.activate();
+        this.keepSearch = true;
         this.$emit('input', null);
         this.callSearchChange();
       },
@@ -190,7 +192,8 @@
         // TODO
       },
       setSearch(item) {
-        if (item) {
+        if (item || !this.keepSearch) {
+          this.keepSearch = false;
           this.search = this.getLabel(item);
         }
       },
