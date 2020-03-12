@@ -1,7 +1,7 @@
 <template>
   <div class="form-autocomplete">
     <form name="autocomplete" @submit.prevent.stop="onKeyEnter" autocomplete="off">
-      <div class="input-group" :class="{'has-icon-right': loading}">
+      <div :class="inputGroupClasses">
         <input
           type="text"
           class="form-input"
@@ -19,23 +19,23 @@
           @keydown.down.prevent="onKeyDown"
           @keydown.up.prevent="onKeyUp"
         >
-        <i v-if="loading" class="form-icon loading"></i>
+        <i v-if="canShowLoading" class="form-icon loading"></i>
         <slot name="action"></slot>
       </div>
     </form>
-    <div class="menu" v-if="canShow" :class="this.direction" :style="menuStyles">
-      <div
+    <ul class="menu" v-if="canShow" :class="this.direction" :style="menuStyles">
+      <li
         class="menu-item"
-        v-for="(option, i) in localOptions"
-        @click="select(option)"
-        :class="itemClasses(option, i)"
+        v-for="(item, i) in availableItems"
+        @click="select(item)"
+        :class="itemClasses(item, i)"
         @mouseover="cursor = i"
       >
-        <slot :option="option" :search="search" :highlight="highlightItem" :get-label="getLabel">
-          <a v-html="highlightItem(getLabel(option))"></a>
+        <slot :item="item" :search="search" :highlight="highlightItem" :get-label="getLabel">
+          <a v-html="highlightItem(getLabel(item))"></a>
         </slot>
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -43,8 +43,8 @@
   export default {
     name: 'Autocomplete',
     props: {
-      options: {
-        type: Array,
+      source: {
+        type: [Array, Function],
         default: () => [],
       },
       value: {
@@ -65,16 +65,16 @@
           return label ? option[label] : option;
         }
       },
-      wait: {
+      debounce: {
         type: Number,
         default: 300,
       },
       minLen: {
         type: Number,
-        default: 1,
+        default: 3,
       },
       inputClass: {
-        type: {},
+        type: [String, Array, Object],
       },
       highlight: {
         type: Boolean,
@@ -99,7 +99,7 @@
       internalSearch: {
         type: Boolean,
         default() {
-          return !('search-change' in this.$listeners);
+          return typeof this.source !== 'function';
         }
       },
       keepOpen: {
@@ -113,8 +113,11 @@
         isOpen: false,
         cursor: -1,
         direction: '',
-        timeout: null,
         keepSearch: false,
+        items: [],
+        timeout: null,
+        isLoading: false,
+        dynamic: typeof this.source === 'function',
       }
     },
     created() {
@@ -154,9 +157,10 @@
         this.activate();
         this.keepSearch = true;
         this.$emit('input', null);
-        this.callSearchChange();
+        this.updateItems();
       },
       onFocus() {
+        this.items = [];
         this.updateDirection();
         this.$emit('focus', this.search);
         this.activate();
@@ -167,7 +171,7 @@
       },
       onKeyUp() {
         if (this.cursor === -1) {
-          this.cursor = this.localOptions.length;
+          this.cursor = this.availableItems.length;
         }
 
         if (this.cursor > 0) {
@@ -176,14 +180,14 @@
         }
       },
       onKeyDown() {
-        if (this.cursor < this.localOptions.length - 1) {
+        if (this.cursor < this.availableItems.length - 1) {
           this.cursor++;
           this.itemView();
         }
       },
       onKeyEnter() {
-        if (this.isOpen && this.localOptions[this.cursor]) {
-          this.select(this.localOptions[this.cursor]);
+        if (this.isOpen && this.availableItems[this.cursor]) {
+          this.select(this.availableItems[this.cursor]);
           this.isOpen = false;
         }
       },
@@ -219,14 +223,26 @@
         }
         return false;
       },
-      callSearchChange() {
+      updateItems() {
+        if (!this.dynamic) return;
+
+        this.items = [];
         clearTimeout(this.timeout);
+
+        if (!this.canUpdateItems) return;
+
         const search = this.search;
-        if (this.canUpdateItems) {
-          this.timeout = setTimeout(() => {
-            this.$emit('search-change', search)
-          }, this.wait);
-        }
+        this.timeout = setTimeout(() => this.callSource(search), this.debounce);
+      },
+      callSource(search) {
+        this.isLoading = true;
+        Promise.resolve()
+          .then(() => this.source(search))
+          .catch(() => [])
+          .then((items) => {
+            this.items = items;
+            this.isLoading = false;
+          })
       },
       updateDirection() {
         this.$nextTick(() => {
@@ -236,23 +252,36 @@
       },
     },
     computed: {
-      localOptions() {
+      availableItems() {
+        if (this.dynamic) {
+          return this.items;
+        }
+
         if (this.internalSearch && this.search) {
-          return this.options
+          return this.source
             .filter((item) => (
               new RegExp(this.search, 'i').test(this.getLabel(item))
             ));
         }
-        return this.options;
+        return this.source;
       },
       hasItems() {
-        return this.localOptions.length > 0;
+        return this.availableItems.length > 0;
       },
       canUpdateItems() {
         return this.search.length >= this.minLen;
       },
       canShow() {
         return (this.isOpen && this.hasItems) || this.keepOpen;
+      },
+      canShowLoading() {
+        return this.loading || this.isLoading;
+      },
+      inputGroupClasses() {
+        return {
+          'has-icon-right': this.canShowLoading,
+          'input-group': 'action' in this.$slots
+        }
       },
       menuStyles() {
         return {
@@ -274,6 +303,9 @@
         top: auto;
         transform: translateY(-$layout-spacing-sm);
       }
+    }
+    .loading:not(:last-child) {
+      right: 1.85rem;
     }
     /*.menu-item {*/
     /*  cursor: pointer;*/

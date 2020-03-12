@@ -1,20 +1,21 @@
 <template>
   <div>
-    <br v-for="x in 30">
     <div class="mt-2 mb-2">
       <dx-autocomplete
         v-model="item1.value"
-        :options="item1.options"
+        :source="item1.source"
       >
         <template slot="action">
           <button
             class="btn btn-primary btn-action input-group-btn"
+            tabindex="-1"
             @click="item1.value = null"
             v-if="item1.value">
             <i class="icon icon-cross"></i>
           </button>
           <button
             class="btn btn-primary btn-action input-group-btn"
+            tabindex="-1"
             v-else>
             <i class="icon icon-search"></i>
           </button>
@@ -30,19 +31,21 @@
     <div class="mt-2 mb-2">
       <dx-autocomplete
         v-model="item2.value"
-        :options="item2.options"
+        :source="item2.source"
         label="description"
         track-by="id"
       >
         <template slot="action">
           <button
             class="btn btn-primary btn-action input-group-btn"
+            tabindex="-1"
             @click="item2.value = null"
             v-if="item2.value">
             <i class="icon icon-cross"></i>
           </button>
           <button
             class="btn btn-primary btn-action input-group-btn"
+            tabindex="-1"
             v-else>
             <i class="icon icon-search"></i>
           </button>
@@ -58,22 +61,23 @@
     <div class="mt-2 mb-2">
       <dx-autocomplete
         v-model="item3.value"
-        :options="item3.options"
-        label="title"
-        track-by="id"
-        :loading="item3.loading"
+        :source="item3.source"
+        label="name"
+        track-by="code"
         :highlight="false"
-        @search-change="updateItems"
+        placeholder="Countries search..."
       >
         <template slot="action">
           <button
             class="btn btn-primary btn-action input-group-btn"
+            tabindex="-1"
             @click="item3.value = null"
             v-if="item3.value">
             <i class="icon icon-cross"></i>
           </button>
           <button
             class="btn btn-primary btn-action input-group-btn"
+            tabindex="-1"
             v-else>
             <i class="icon icon-search"></i>
           </button>
@@ -100,30 +104,35 @@
       return {
         item1: {
           value: options[6].label,
-          options: options.map((item) => item.label),
+          source: options.map((item) => item.label),
         },
         item2: {
           value: options[9],
-          options: options,
+          source: options,
         },
         item3: {
           value: null,
-          options: [],
-          loading: false,
+          source: this.findCountries,
         }
       }
     },
     methods: {
-      updateItems(search) {
-        this.item3.loading = true;
-        fetch('https://jsonplaceholder.typicode.com/posts?search=' + search)
-          .then((response) => response.json())
+      findCountries(search) {
+        return fetch('https://restcountries.eu/rest/v2/name/' + search)
+          .then((response) => new Promise((resolve) => {
+            setTimeout(() => resolve(response.json()), 300);
+          }))
           .then((items) => {
-            this.item3.options = items
-              .filter(({ title }) => new RegExp(search, 'i').test(title));
-          })
-          .catch(console.error)
-          .then(() => this.item3.loading = false);
+            return items.map((item) => ({
+              name: item.name,
+              code: item.alpha2Code,
+              capital: item.capital,
+              region: item.subregion,
+              nativeName: item.nativeName,
+              currency: item.currencies.length ? item.currencies[0] : null,
+              flag: item.flag,
+            }));
+          });
       }
     }
   }
