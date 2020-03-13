@@ -307,6 +307,11 @@
     .loading:not(:last-child) {
       right: 1.85rem;
     }
+    .menu-item {
+      a {
+        cursor: pointer;
+      }
+    }
     /*.menu-item {*/
     /*  cursor: pointer;*/
     /*  &:hover,*/
