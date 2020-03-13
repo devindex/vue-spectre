@@ -8,9 +8,7 @@
   "module": "dist/vue-spectre.esm.js",
   "unpkg": "dist/vue-spectre.min.js",
   "files": [
-    "dist/*",
-    "src/**/*.vue",
-    "!src/serve-dev.*"
+    "dist/*"
   ],
   "scripts": {
     "serve": "vue-cli-service serve src/sample/main.js",
