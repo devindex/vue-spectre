@@ -39,6 +39,16 @@ const baseConfig = {
       template: {
         isProduction: true,
       },
+      style: {
+        preprocessOptions: {
+          scss: {
+            includePaths: ['node_modules/', 'src/'],
+            importer(path) {
+              return { file: path[0] !== '~' ? path : path.slice(1) };
+            }
+          },
+        },
+      }
     },
     babel: {
       exclude: 'node_modules/**',
