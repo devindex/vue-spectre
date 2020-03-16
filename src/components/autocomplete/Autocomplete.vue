@@ -7,6 +7,7 @@
           class="form-input"
           autocomplete="off"
           v-model="search"
+          :id="inputId"
           :class="inputClass"
           :disabled="disabled"
           :placeholder="placeholder"
@@ -75,6 +76,9 @@
       },
       inputClass: {
         type: [String, Array, Object],
+      },
+      inputId: {
+        type: String,
       },
       highlight: {
         type: Boolean,
