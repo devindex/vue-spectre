@@ -154,7 +154,9 @@
       select(item) {
         this.setSearch(item);
         this.$emit('input', item);
-        this.$emit('select', item);
+        this.$nextTick(() => {
+          this.$emit('select', item);
+        });
       },
       onInput() {
         this.cursor = -1;
