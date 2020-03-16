@@ -162,7 +162,9 @@ var script = {
     select(item) {
       this.setSearch(item);
       this.$emit('input', item);
-      this.$emit('select', item);
+      this.$nextTick(() => {
+        this.$emit('select', item);
+      });
     },
 
     onInput() {
@@ -585,7 +587,7 @@ var __vue_staticRenderFns__ = [];
 
 const __vue_inject_styles__ = function (inject) {
   if (!inject) return;
-  inject("data-v-a81885a8_0", {
+  inject("data-v-064e1050_0", {
     source: ".form-autocomplete .menu{overflow-y:auto}.form-autocomplete .menu.top{bottom:100%;top:auto;transform:translateY(-.2rem)}.form-autocomplete .loading:not(:last-child){right:1.85rem}.form-autocomplete .menu-item a{cursor:pointer}.form-autocomplete .menu-item-active{background-color:#f1f1fc}.form-autocomplete .highlight{font-weight:700}",
     map: undefined,
     media: undefined

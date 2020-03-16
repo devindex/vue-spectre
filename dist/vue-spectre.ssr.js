@@ -153,9 +153,13 @@ var script = {
       return value;
     },
     select: function select(item) {
+      var _this = this;
+
       this.setSearch(item);
       this.$emit('input', item);
-      this.$emit('select', item);
+      this.$nextTick(function () {
+        _this.$emit('select', item);
+      });
     },
     onInput: function onInput() {
       this.cursor = -1;
@@ -229,7 +233,7 @@ var script = {
       return false;
     },
     updateItems: function updateItems() {
-      var _this = this;
+      var _this2 = this;
 
       if (!this.dynamic) return;
       this.items = [];
@@ -237,37 +241,37 @@ var script = {
       if (!this.canUpdateItems) return;
       var search = this.search;
       this.timeout = setTimeout(function () {
-        return _this.callSource(search);
+        return _this2.callSource(search);
       }, this.debounce);
     },
     callSource: function callSource(search) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.isLoading = true;
       Promise.resolve().then(function () {
-        return _this2.source(search);
+        return _this3.source(search);
       }).catch(function () {
         return [];
       }).then(function (items) {
-        _this2.items = items;
-        _this2.isLoading = false;
+        _this3.items = items;
+        _this3.isLoading = false;
       });
     },
     updateDirection: function updateDirection() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.$nextTick(function () {
-        var _this3$$el$getBoundin = _this3.$el.getBoundingClientRect(),
-            top = _this3$$el$getBoundin.top,
-            height = _this3$$el$getBoundin.height;
+        var _this4$$el$getBoundin = _this4.$el.getBoundingClientRect(),
+            top = _this4$$el$getBoundin.top,
+            height = _this4$$el$getBoundin.height;
 
-        _this3.direction = top + height / 2 > window.innerHeight / 2 ? 'top' : 'bottom';
+        _this4.direction = top + height / 2 > window.innerHeight / 2 ? 'top' : 'bottom';
       });
     }
   },
   computed: {
     availableItems: function availableItems() {
-      var _this4 = this;
+      var _this5 = this;
 
       if (this.dynamic) {
         return this.items;
@@ -275,7 +279,7 @@ var script = {
 
       if (this.internalSearch && this.search) {
         return this.source.filter(function (item) {
-          return new RegExp(_this4.search, 'i').test(_this4.getLabel(item));
+          return new RegExp(_this5.search, 'i').test(_this5.getLabel(item));
         });
       }
 
@@ -450,7 +454,7 @@ var __vue_staticRenderFns__ = [];
 
 var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-a81885a8_0", {
+  inject("data-v-064e1050_0", {
     source: ".form-autocomplete .menu{overflow-y:auto}.form-autocomplete .menu.top{bottom:100%;top:auto;transform:translateY(-.2rem)}.form-autocomplete .loading:not(:last-child){right:1.85rem}.form-autocomplete .menu-item a{cursor:pointer}.form-autocomplete .menu-item-active{background-color:#f1f1fc}.form-autocomplete .highlight{font-weight:700}",
     map: undefined,
     media: undefined
@@ -462,7 +466,7 @@ var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-a81885a8";
+var __vue_module_identifier__ = "data-v-064e1050";
 /* functional template */
 
 var __vue_is_functional_template__ = false;
