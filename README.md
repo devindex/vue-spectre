@@ -1,17 +1,21 @@
-# vue-spectre
+# Vue Spectre
 Spectre.css components and plugins for VueJS
 
 ## Installation
 
-NPM
+### npm
 
-  `npm i -S @devindex/vue-spectre`
+```bash
+$ npm i -S @devindex/vue-spectre
+```
   
-Yarn
+### yarn
 
-  `yarn add @devindex/vue-spectre`
+```bash
+$ yarn add @devindex/vue-spectre
+```
 
-## Usage
+### Usage
 
 ```javascript
 import Vue from 'vue'
@@ -23,32 +27,39 @@ Vue.use(VueSpectre);
 
 ## Components
 
-### dx-autocomplete
+### Autocomplete
 
 ```html
 <dx-autocomplete
     v-model="value"
     :source="source"
     label="name"
-    track-by="code"
-
-    placeholder="..."
-    :custon-label="customLabelFn"
-    :debounce="300"
-    :min-len="3"
-    :input-class="custom-ac-input-class"
-    :input-id="custom-ac-input-id"
-    :highlight="false"
-    :disabled="false"
-    :loading="false"
-    :max-height="300"
-    @select="onSelect"
-    @focus="onFocus"
-    @blur="onBlur">
+    track-by="id">
 </dx-autocomplete>
 ```
 
-### dx-calendar
+| Property name | Type | Default | Required |
+| ------------- | ---- | ------- | -------- |
+| source | Function\|Array |  | true |
+| label | String |  | true (when source is an array of objects) |
+| track-by | String | | true (when source is an array of objects) |
+| placeholder | String | `''` | false |
+| custom-label | String |  | false |
+| debounce | Number | `300` | false |
+| min-len | Number | `3` | false |
+| input-class | String | `''` | false |
+| input-id | String | `''` | false |
+| highlight | Boolean | `false` | false |
+| disabled | Boolean | `false` | false |
+| loading | Boolean | `false` | false |
+
+| Event name | Attributes |
+| ---------- | ------ |
+| select | `(value)` |
+| focus | `(search)` |
+| blur | `(search)` |
+
+### Calendar
 
 ```html
 <dx-calendar
@@ -64,7 +75,7 @@ Vue.use(VueSpectre);
 </dx-calendar>
 ```
 
-### dx-modal
+### Modal
 
 ```html
 <dx-modal
@@ -77,7 +88,7 @@ Vue.use(VueSpectre);
 </dx-modal>
 ```
 
-### dx-pagination
+### Pagination
 
 ```html
 <dx-pagination
@@ -89,7 +100,7 @@ Vue.use(VueSpectre);
 </dx-pagination>
 ```
 
-### dx-tabs
+### Tabs
 
 ```html
 <dx-tabs 
