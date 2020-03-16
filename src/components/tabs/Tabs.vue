@@ -45,7 +45,7 @@
           tab.isActive = (tab.hash === selectedTab.hash);
         });
 
-        this.$emit('changed', { tab: selectedTab });
+        this.$emit('change', { tab: selectedTab });
         this.activeTabHash = selectedTab.hash;
       },
       activeTab () {
