@@ -150,7 +150,7 @@
       select(item) {
         this.setSearch(item);
         this.$emit('input', item);
-        this.$emit('selected', item);
+        this.$emit('select', item);
       },
       onInput() {
         this.cursor = -1;
