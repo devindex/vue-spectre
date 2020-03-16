@@ -39,6 +39,7 @@
 //
 //
 //
+//
 var script = {
   name: 'Autocomplete',
   props: {
@@ -77,6 +78,9 @@ var script = {
     },
     inputClass: {
       type: [String, Array, Object]
+    },
+    inputId: {
+      type: String
     },
     highlight: {
       type: Boolean,
@@ -151,7 +155,7 @@ var script = {
     select: function select(item) {
       this.setSearch(item);
       this.$emit('input', item);
-      this.$emit('selected', item);
+      this.$emit('select', item);
     },
     onInput: function onInput() {
       this.cursor = -1;
@@ -427,7 +431,7 @@ var __vue_render__ = function __vue_render__() {
 
   return _c('div', {
     staticClass: "form-autocomplete"
-  }, [_vm._ssrNode("<form name=\"autocomplete\" autocomplete=\"off\">", "</form>", [_vm._ssrNode("<div" + _vm._ssrClass(null, _vm.inputGroupClasses) + ">", "</div>", [_vm._ssrNode("<input type=\"text\" autocomplete=\"off\"" + _vm._ssrAttr("disabled", _vm.disabled) + _vm._ssrAttr("placeholder", _vm.placeholder) + _vm._ssrAttr("value", _vm.search) + _vm._ssrClass("form-input", _vm.inputClass) + "> " + (_vm.canShowLoading ? "<i class=\"form-icon loading\"></i>" : "<!---->") + " "), _vm._t("action")], 2)]), _vm._ssrNode(" "), _vm.canShow ? _vm._ssrNode("<ul" + _vm._ssrClass("menu", this.direction) + _vm._ssrStyle(null, _vm.menuStyles, null) + ">", "</ul>", _vm._l(_vm.availableItems, function (item, i) {
+  }, [_vm._ssrNode("<form name=\"autocomplete\" autocomplete=\"off\">", "</form>", [_vm._ssrNode("<div" + _vm._ssrClass(null, _vm.inputGroupClasses) + ">", "</div>", [_vm._ssrNode("<input type=\"text\" autocomplete=\"off\"" + _vm._ssrAttr("id", _vm.inputId) + _vm._ssrAttr("disabled", _vm.disabled) + _vm._ssrAttr("placeholder", _vm.placeholder) + _vm._ssrAttr("value", _vm.search) + _vm._ssrClass("form-input", _vm.inputClass) + "> " + (_vm.canShowLoading ? "<i class=\"form-icon loading\"></i>" : "<!---->") + " "), _vm._t("action")], 2)]), _vm._ssrNode(" "), _vm.canShow ? _vm._ssrNode("<ul" + _vm._ssrClass("menu", this.direction) + _vm._ssrStyle(null, _vm.menuStyles, null) + ">", "</ul>", _vm._l(_vm.availableItems, function (item, i) {
     return _vm._ssrNode("<li" + _vm._ssrClass("menu-item", _vm.itemClasses(item, i)) + ">", "</li>", [_vm._t("default", [_c('a', {
       domProps: {
         "innerHTML": _vm._s(_vm.highlightItem(_vm.getLabel(item)))
@@ -446,7 +450,7 @@ var __vue_staticRenderFns__ = [];
 
 var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-64ccc612_0", {
+  inject("data-v-a81885a8_0", {
     source: ".form-autocomplete .menu{overflow-y:auto}.form-autocomplete .menu.top{bottom:100%;top:auto;transform:translateY(-.2rem)}.form-autocomplete .loading:not(:last-child){right:1.85rem}.form-autocomplete .menu-item a{cursor:pointer}.form-autocomplete .menu-item-active{background-color:#f1f1fc}.form-autocomplete .highlight{font-weight:700}",
     map: undefined,
     media: undefined
@@ -458,7 +462,7 @@ var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-64ccc612";
+var __vue_module_identifier__ = "data-v-a81885a8";
 /* functional template */
 
 var __vue_is_functional_template__ = false;
@@ -1070,7 +1074,7 @@ var script$4 = {
       this.tabs.forEach(function (tab) {
         tab.isActive = tab.hash === selectedTab.hash;
       });
-      this.$emit('changed', {
+      this.$emit('change', {
         tab: selectedTab
       });
       this.activeTabHash = selectedTab.hash;
@@ -1106,7 +1110,7 @@ var __vue_staticRenderFns__$4 = [];
 
 var __vue_inject_styles__$4 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-38129b6c_0", {
+  inject("data-v-97753820_0", {
     source: ".tab .tab-item a:focus{box-shadow:none}",
     map: undefined,
     media: undefined
@@ -1118,7 +1122,7 @@ var __vue_inject_styles__$4 = function __vue_inject_styles__(inject) {
 var __vue_scope_id__$4 = undefined;
 /* module identifier */
 
-var __vue_module_identifier__$4 = "data-v-38129b6c";
+var __vue_module_identifier__$4 = "data-v-97753820";
 /* functional template */
 
 var __vue_is_functional_template__$4 = false;

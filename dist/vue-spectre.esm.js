@@ -39,6 +39,7 @@
 //
 //
 //
+//
 var script = {
   name: 'Autocomplete',
   props: {
@@ -77,6 +78,9 @@ var script = {
     },
     inputClass: {
       type: [String, Array, Object]
+    },
+    inputId: {
+      type: String
     },
     highlight: {
       type: Boolean,
@@ -158,7 +162,7 @@ var script = {
     select(item) {
       this.setSearch(item);
       this.$emit('input', item);
-      this.$emit('selected', item);
+      this.$emit('select', item);
     },
 
     onInput() {
@@ -483,6 +487,7 @@ var __vue_render__ = function () {
     attrs: {
       "type": "text",
       "autocomplete": "off",
+      "id": _vm.inputId,
       "disabled": _vm.disabled,
       "placeholder": _vm.placeholder
     },
@@ -580,7 +585,7 @@ var __vue_staticRenderFns__ = [];
 
 const __vue_inject_styles__ = function (inject) {
   if (!inject) return;
-  inject("data-v-64ccc612_0", {
+  inject("data-v-a81885a8_0", {
     source: ".form-autocomplete .menu{overflow-y:auto}.form-autocomplete .menu.top{bottom:100%;top:auto;transform:translateY(-.2rem)}.form-autocomplete .loading:not(:last-child){right:1.85rem}.form-autocomplete .menu-item a{cursor:pointer}.form-autocomplete .menu-item-active{background-color:#f1f1fc}.form-autocomplete .highlight{font-weight:700}",
     map: undefined,
     media: undefined
@@ -1320,7 +1325,7 @@ var script$4 = {
       this.tabs.forEach(tab => {
         tab.isActive = tab.hash === selectedTab.hash;
       });
-      this.$emit('changed', {
+      this.$emit('change', {
         tab: selectedTab
       });
       this.activeTabHash = selectedTab.hash;
@@ -1376,7 +1381,7 @@ var __vue_staticRenderFns__$4 = [];
 
 const __vue_inject_styles__$4 = function (inject) {
   if (!inject) return;
-  inject("data-v-38129b6c_0", {
+  inject("data-v-97753820_0", {
     source: ".tab .tab-item a:focus{box-shadow:none}",
     map: undefined,
     media: undefined
