@@ -75,6 +75,26 @@ Vue.use(VueSpectre);
 </dx-calendar>
 ```
 
+### Dropdown
+
+```html
+<dx-dropdown
+    :items="[]"
+    label="name"
+    @select="onSelect">
+    Dropdown
+</dx-dropdown>
+```
+
+| Property name | Type | Default | Required |
+| ------------- | ---- | ------- | -------- |
+| items | Array |  | true |
+| label | String |  | true (when item is an array of objects) |
+
+| Event name | Attributes |
+| ---------- | ------ |
+| select | `(value)` |
+
 ### Modal
 
 ```html

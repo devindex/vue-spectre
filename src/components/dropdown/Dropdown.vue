@@ -1,59 +1,74 @@
 <template>
-  <div class="dropdown">
-    <a class="dropdown-trigger" :class="{'dropdown-toggle': active}"
-       @click="active = !active" @blur="active = false" tabindex="0">
-      <slot name="trigger">
-        <span>
-<!--          <fa-icon :icon="['fal', 'bars']" class="icon-default text-dark"></fa-icon>-->
-        </span>
-      </slot>
-    </a>
-    <slot></slot>
+  <div class="dropdown" :class="classes">
+    <a class="c-hand" @click="toggle" tabindex="0"><slot></slot></a>
+
+    <ul class="menu" v-show="active" @click.stop>
+      <template v-for="item in items">
+        <li class="divider" v-if="item === '-'"></li>
+        <li class="menu-item" @click="select(item)" v-else>
+          <slot name="item" :item="item">
+            <a href="#" @click.prevent>{{ getLabel(item) }}</a>
+          </slot>
+        </li>
+      </template>
+    </ul>
   </div>
 </template>
 
 <script>
   export default {
     name: 'Dropdown',
-    data () {
+    props: {
+      items: {
+        type: Array,
+        default: [],
+      },
+      label: {
+        type: String,
+      },
+      direction: {
+        type: String,
+        enum: ['left', 'right'],
+        default: 'left',
+      }
+    },
+    data() {
       return {
         active: false
+      }
+    },
+    beforeDestroy() {
+      this.deactivate();
+    },
+    methods: {
+      toggle() {
+        this.active ? this.deactivate() : this.activate();
+      },
+      activate() {
+        this.active = true;
+        setTimeout(() => (
+          document.addEventListener('click', this.deactivate)
+        ), 1);
+      },
+      deactivate() {
+        this.active = false;
+        document.removeEventListener('click', this.deactivate)
+      },
+      select(item) {
+        this.$emit('select', item);
+        this.deactivate();
+      },
+      getLabel(item) {
+        return this.label ? item[this.label] : item;
+      }
+    },
+    computed: {
+      classes() {
+        return {
+          active: this.active,
+          'dropdown-right': this.direction === 'right',
+        }
       }
     }
   }
 </script>
-
-<!--<style lang="scss">-->
-<!--  @import '~assets/scss/variables';-->
-
-<!--  .dropdown {-->
-<!--    .dropdown-trigger {-->
-<!--      cursor: pointer;-->
-<!--      display: inline-block;-->
-<!--      span {-->
-<!--        border-radius: $border-radius;-->
-<!--        display: inline-block;-->
-<!--        margin: 0;-->
-<!--        padding: .2rem $layout-spacing;-->
-<!--        &.btn {-->
-<!--          display: inline-flex;-->
-<!--        }-->
-<!--      }-->
-<!--    }-->
-<!--    .menu-item {-->
-<!--      a {-->
-<!--        transition: all .1s ease;-->
-<!--      }-->
-<!--      a:hover {-->
-<!--        color: $light-color;-->
-<!--      }-->
-<!--      a.has-icon {-->
-<!--        display: flex;-->
-<!--        align-items: center;-->
-<!--        svg {-->
-<!--          margin-right: $layout-spacing;-->
-<!--        }-->
-<!--      }-->
-<!--    }-->
-<!--  }-->
-<!--</style>-->
