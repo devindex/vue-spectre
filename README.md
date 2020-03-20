@@ -44,7 +44,7 @@ Vue.use(VueSpectre);
 | label | String |  | true (when source is an array of objects) |
 | track-by | String | | true (when source is an array of objects) |
 | placeholder | String | `''` | false |
-| custom-label | String |  | false |
+| custom-label | Function |  | false |
 | debounce | Number | `300` | false |
 | min-len | Number | `3` | false |
 | input-class | String | `''` | false |
