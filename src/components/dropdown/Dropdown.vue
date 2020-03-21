@@ -2,7 +2,7 @@
   <div class="dropdown" :class="classes">
     <a class="c-hand" @click="toggle" tabindex="0"><slot></slot></a>
 
-    <ul class="menu" v-show="active" @click.stop>
+    <ul class="menu" v-show="active" :style="menuStyles" @click.stop>
       <template v-for="item in items">
         <li class="divider" v-if="item === '-'"></li>
         <li class="menu-item" @click="select(item)" v-else>
@@ -30,6 +30,10 @@
         type: String,
         enum: ['left', 'right'],
         default: 'left',
+      },
+      maxHeight: {
+        type: Number,
+        default: 300,
       }
     },
     data() {
@@ -67,6 +71,11 @@
         return {
           active: this.active,
           'dropdown-right': this.direction === 'right',
+        }
+      },
+      menuStyles() {
+        return {
+          maxHeight: `${this.maxHeight}px`,
         }
       }
     }
