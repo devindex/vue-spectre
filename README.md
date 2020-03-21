@@ -95,6 +95,18 @@ Vue.use(VueSpectre);
 | ---------- | ------ |
 | select | `(value)` |
 
+### Inputs
+
+Input date
+```html
+<dx-input-date v-model="date" />
+```
+
+Input number
+```html
+<dx-input-number v-model="number" :precision="2" />
+```
+
 ### Modal
 
 ```html
