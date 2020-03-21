@@ -1,5 +1,5 @@
 import * as components from 'src/components/index';
-import { registerComponents } from './utils/components';
+import { registerComponents } from './utils';
 
 // install function executed by Vue.use()
 function install(Vue) {
