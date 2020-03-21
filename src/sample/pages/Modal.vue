@@ -1,7 +1,8 @@
 <template>
   <div>
-    <button class="btn btn-primary" @click="show = true">Show modal</button>
-    <dx-modal :show="show" title="Modal" @close="show = false">
+    <button class="btn btn-primary" @click="show1 = true">Show modal</button>
+
+    <dx-modal :show="show1" title="Modal" @close="show1 = false">
       <p>
         Mussum Ipsum, cacilds vidis litro abertis. Si u mundo tá muito paradis?
         Toma um mé que o mundo vai girarzis! Detraxit consequat et quo num tendi nada.
@@ -15,7 +16,19 @@
         eu sit. Vide electram sadipscing et per.
       </p>
       <template slot="footer">
-        <button class="btn btn-primary" @click="show = false">Close</button>
+        <button class="btn mr-2" @click="show2 = true">Open another modal</button>
+        <button class="btn btn-primary" @click="show1 = false">Close</button>
+      </template>
+    </dx-modal>
+
+    <dx-modal :show="show2" title="Another modal" @close="show2 = false" size="sm">
+      <p class="mb-0">
+        Per aumento de cachacis, eu reclamis. Admodum accumsan disputationi eu sit.
+        Vide electram sadipscing et per. Detraxit consequat et quo num tendi nada.
+        In elementis mé pra quem é amistosis quis leo.
+      </p>
+      <template slot="footer">
+        <button class="btn btn-primary" @click="show2 = false">Ok</button>
       </template>
     </dx-modal>
 
@@ -30,7 +43,7 @@
       </thead>
       <tbody>
       <tr>
-        <td>code</td>
+        <td>show</td>
         <td>Boolean</td>
         <td><code>false</code></td>
       </tr>
@@ -38,6 +51,21 @@
         <td>title</td>
         <td>String</td>
         <td><code>""</code></td>
+      </tr>
+      <tr>
+        <td>closable</td>
+        <td>Boolean</td>
+        <td><code>true</code></td>
+      </tr>
+      <tr>
+        <td>size</td>
+        <td>String</td>
+        <td><code>md</code></td>
+      </tr>
+      <tr>
+        <td>click-to-close</td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
       </tr>
       </tbody>
     </table>
@@ -62,7 +90,8 @@
   export default {
     data() {
       return {
-        show: false,
+        show1: false,
+        show2: false,
       }
     }
   }

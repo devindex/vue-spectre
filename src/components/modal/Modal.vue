@@ -1,12 +1,12 @@
 <template>
   <div>
     <transition name="modal">
-      <div class="modal active" v-if="show" :class="classes">
-        <div class="modal-overlay" @click="close()"></div>
+      <div class="modal active" :class="classes" v-if="show">
+        <div class="modal-overlay" @click="overlayClick"></div>
         <div class="modal-container">
           <div class="modal-header">
-            <button class="btn btn-clear float-right" v-if="closable" @click="close()"></button>
-            <div class="modal-title">{{ title }}</div>
+            <button class="btn btn-clear float-right" v-if="closable" @click="close" />
+            <div class="modal-title" v-if="title">{{ title }}</div>
           </div>
 
           <div class="modal-body">
@@ -23,85 +23,115 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      closable: {
-        type: Boolean,
-        default: true,
-      },
-      show: {
-        type: Boolean,
-        default: false
-      },
-      size: {
-        type: String,
-        default: null
-      },
-      title: String
-    },
-    mounted () {
-      this.$nextTick(() => {
-        document.body.appendChild(this.$el);
+import { randomHash, initConfig } from '../../utils';
 
-        if (this.closable) {
-          document.addEventListener('keydown', event => {
-            if (this.show && event.keyCode === 27) {
-              this.close();
-            }
-          });
-        }
-      })
+export default {
+  props: {
+    show: {
+      type: Boolean,
+      default: false
     },
-    destroyed () {
-      this.$el.remove();
+    title: {
+      type: String,
     },
-    methods: {
-      close () {
-        if (this.closable) {
-          this.$emit('close');
-        }
+    closable: {
+      type: Boolean,
+      default: true,
+    },
+    size: {
+      type: String,
+      default: null
+    },
+    clickToClose: {
+      type: Boolean,
+      default: false,
+    }
+  },
+  data() {
+    return {
+      hash: randomHash(),
+      activeModals: initConfig('activeModals', []),
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      document.body.appendChild(this.$el);
+
+      if (this.show) {
+        this.activate();
+      }
+    })
+  },
+  destroyed() {
+    this.$el.remove();
+  },
+  watch: {
+    show(value) {
+      value ? this.activate() : this.deactivate();
+    }
+  },
+  methods: {
+    activate() {
+      this.activeModals.push(this.hash);
+      if (this.closable) {
+        document.addEventListener('keydown', this.closeListener);
       }
     },
-    computed: {
-      classes () {
-        const classes = [];
-
-        if (this.size !== null) {
-          classes.push(`modal-${this.size}`)
+    deactivate() {
+      this.activeModals.forEach((hash, i) => {
+        if (hash === this.hash) {
+          this.activeModals.splice(i, 1);
         }
-
-        return classes;
+      });
+      if (this.closable) {
+        document.removeEventListener('keydown', this.closeListener);
+      }
+    },
+    closeListener(e) {
+      if (
+        this.show
+        && e.keyCode === 27
+        && this.activeModals[this.activeModals.length - 1] === this.hash
+      ) {
+        this.close();
+      }
+    },
+    overlayClick() {
+      if (this.clickToClose) {
+        this.close();
+      }
+    },
+    close() {
+      if (this.closable) {
+        this.$emit('close');
       }
     }
+  },
+  computed: {
+    classes() {
+      const classes = [];
+
+      if (this.size !== null) {
+        classes.push(`modal-${this.size}`)
+      }
+
+      return classes;
+    }
   }
+}
 </script>
 
-<!--<style lang="scss">-->
-<!--  @import '~assets/scss/variables';-->
-
-<!--  .modal {-->
-<!--    &.modal-enter,-->
-<!--    &.modal-leave-active {-->
-<!--      opacity: 0;-->
-<!--      transform: scale(1.1);-->
-<!--    }-->
-<!--    .modal-container {-->
-<!--      min-width: 20rem;-->
-<!--    }-->
-<!--    &.modal-md {-->
-<!--      .modal-container {-->
-<!--        min-width: 35rem;-->
-<!--      }-->
-<!--    }-->
-<!--    &.modal-lg {-->
-<!--      .modal-container {-->
-<!--        @media screen and (min-width: 1024px) {-->
-<!--          min-width: 50rem;-->
-<!--        }-->
-<!--      }-->
-<!--    }-->
-<!--    .modal-body {-->
-<!--      max-height: 80vh;-->
-<!--    }-->
-<!--  }-->
-<!--</style>-->
+<style lang="scss">
+  .modal.active {
+    &.modal-enter-active {
+      transition: all .15s;
+    }
+    &.modal-leave-active {
+      transition: all .3s;
+    }
+    &.modal-enter,
+    &.modal-leave-to {
+      opacity: 0;
+    }
+  }
+</style>
