@@ -20,7 +20,9 @@ export function randomHash() {
 }
 
 export function registerComponent(Vue, name, def) {
-  Vue.component(`dx-${name.toLowerCase()}`, def);
+  const tagName = `dx${name}`
+    .replace(/[A-Z]/g, c => `-${c.toLowerCase()}`);
+  Vue.component(tagName, def);
 }
 
 export function registerComponents(Vue, components = {}) {
