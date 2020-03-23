@@ -65,16 +65,23 @@ Vue.use(VueSpectre);
 ```html
 <dx-calendar
     :date="date"
-    @select="onSelect"
-
-    :min="minDate"
-    :max="maxDate"    
-    :highlights="[]"
-    @next="onNextMonth"
-    @prev="onPrevMonth"
-    @month-change="onMonthChange">
+    @select="onSelect">
 </dx-calendar>
 ```
+
+| Property name | Type | Default | Required |
+| ------------- | ---- | ------- | -------- |
+| date | Date |  | true |
+| min | Date | `null` | false |
+| max | Date | `null` | false |
+| highlights | Array | `[]` | false |
+
+| Event name | Attributes |
+| ---------- | ------ |
+| select | `(value)` |
+| prev | `()` |
+| next | `()` |
+| month-change | `()` |
 
 ### Dropdown
 
