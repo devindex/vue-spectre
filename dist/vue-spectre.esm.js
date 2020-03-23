@@ -42,6 +42,7 @@ import StringMask from 'string-mask';
 //
 //
 //
+//
 var script = {
   name: 'Autocomplete',
   props: {
@@ -89,6 +90,10 @@ var script = {
       default: false
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    readonly: {
       type: Boolean,
       default: false
     },
@@ -493,6 +498,7 @@ var __vue_render__ = function () {
       "autocomplete": "off",
       "id": _vm.inputId,
       "disabled": _vm.disabled,
+      "readonly": _vm.readonly,
       "placeholder": _vm.placeholder
     },
     domProps: {
@@ -589,7 +595,7 @@ var __vue_staticRenderFns__ = [];
 
 const __vue_inject_styles__ = function (inject) {
   if (!inject) return;
-  inject("data-v-064e1050_0", {
+  inject("data-v-4b48fbb1_0", {
     source: ".form-autocomplete .menu{overflow-y:auto}.form-autocomplete .menu.top{bottom:100%;top:auto;transform:translateY(-.2rem)}.form-autocomplete .loading:not(:last-child){right:1.85rem}.form-autocomplete .menu-item a{cursor:pointer}.form-autocomplete .menu-item-active{background-color:#f1f1fc}.form-autocomplete .highlight{font-weight:700}",
     map: undefined,
     media: undefined

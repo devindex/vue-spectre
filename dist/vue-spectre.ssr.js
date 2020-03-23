@@ -40,6 +40,7 @@
 //
 //
 //
+//
 var script = {
   name: 'Autocomplete',
   props: {
@@ -87,6 +88,10 @@ var script = {
       default: false
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    readonly: {
       type: Boolean,
       default: false
     },
@@ -435,7 +440,7 @@ var __vue_render__ = function __vue_render__() {
 
   return _c('div', {
     staticClass: "form-autocomplete"
-  }, [_vm._ssrNode("<form name=\"autocomplete\" autocomplete=\"off\">", "</form>", [_vm._ssrNode("<div" + _vm._ssrClass(null, _vm.inputGroupClasses) + ">", "</div>", [_vm._ssrNode("<input type=\"text\" autocomplete=\"off\"" + _vm._ssrAttr("id", _vm.inputId) + _vm._ssrAttr("disabled", _vm.disabled) + _vm._ssrAttr("placeholder", _vm.placeholder) + _vm._ssrAttr("value", _vm.search) + _vm._ssrClass("form-input", _vm.inputClass) + "> " + (_vm.canShowLoading ? "<i class=\"form-icon loading\"></i>" : "<!---->") + " "), _vm._t("action")], 2)]), _vm._ssrNode(" "), _vm.canShow ? _vm._ssrNode("<ul" + _vm._ssrClass("menu", this.direction) + _vm._ssrStyle(null, _vm.menuStyles, null) + ">", "</ul>", _vm._l(_vm.availableItems, function (item, i) {
+  }, [_vm._ssrNode("<form name=\"autocomplete\" autocomplete=\"off\">", "</form>", [_vm._ssrNode("<div" + _vm._ssrClass(null, _vm.inputGroupClasses) + ">", "</div>", [_vm._ssrNode("<input type=\"text\" autocomplete=\"off\"" + _vm._ssrAttr("id", _vm.inputId) + _vm._ssrAttr("disabled", _vm.disabled) + _vm._ssrAttr("readonly", _vm.readonly) + _vm._ssrAttr("placeholder", _vm.placeholder) + _vm._ssrAttr("value", _vm.search) + _vm._ssrClass("form-input", _vm.inputClass) + "> " + (_vm.canShowLoading ? "<i class=\"form-icon loading\"></i>" : "<!---->") + " "), _vm._t("action")], 2)]), _vm._ssrNode(" "), _vm.canShow ? _vm._ssrNode("<ul" + _vm._ssrClass("menu", this.direction) + _vm._ssrStyle(null, _vm.menuStyles, null) + ">", "</ul>", _vm._l(_vm.availableItems, function (item, i) {
     return _vm._ssrNode("<li" + _vm._ssrClass("menu-item", _vm.itemClasses(item, i)) + ">", "</li>", [_vm._t("default", [_c('a', {
       domProps: {
         "innerHTML": _vm._s(_vm.highlightItem(_vm.getLabel(item)))
@@ -454,7 +459,7 @@ var __vue_staticRenderFns__ = [];
 
 var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-064e1050_0", {
+  inject("data-v-4b48fbb1_0", {
     source: ".form-autocomplete .menu{overflow-y:auto}.form-autocomplete .menu.top{bottom:100%;top:auto;transform:translateY(-.2rem)}.form-autocomplete .loading:not(:last-child){right:1.85rem}.form-autocomplete .menu-item a{cursor:pointer}.form-autocomplete .menu-item-active{background-color:#f1f1fc}.form-autocomplete .highlight{font-weight:700}",
     map: undefined,
     media: undefined
@@ -466,7 +471,7 @@ var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-064e1050";
+var __vue_module_identifier__ = "data-v-4b48fbb1";
 /* functional template */
 
 var __vue_is_functional_template__ = false;
