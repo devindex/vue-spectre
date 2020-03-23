@@ -10,6 +10,7 @@
           :id="inputId"
           :class="inputClass"
           :disabled="disabled"
+          :readonly="readonly"
           :placeholder="placeholder"
           @input="onInput"
           @focus.prevent="onFocus"
@@ -85,6 +86,10 @@
         default: false,
       },
       disabled: {
+        type: Boolean,
+        default: false,
+      },
+      readonly: {
         type: Boolean,
         default: false,
       },

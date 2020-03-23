@@ -51,6 +51,7 @@ Vue.use(VueSpectre);
 | input-id | String | `''` | false |
 | highlight | Boolean | `false` | false |
 | disabled | Boolean | `false` | false |
+| readonly | Boolean | `false` | false |
 | loading | Boolean | `false` | false |
 
 | Event name | Attributes |
