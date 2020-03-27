@@ -3,7 +3,7 @@
     type="text"
     class="form-input"
     :value="display"
-    @input="onInput"
+    v-on="inputListeners"
     :placeholder="pattern"
     ref="input"
   >
@@ -76,6 +76,9 @@ export default {
   computed: {
     pattern() {
       return '00/00/0000';
+    },
+    inputListeners() {
+      return { ...this.$listeners, input: this.onInput };
     },
   },
 }

@@ -3,7 +3,7 @@
     type="text"
     class="form-input text-right"
     :value="display"
-    @input="onInput"
+    v-on="inputListeners"
     :placeholder="placeholder"
     ref="input"
   >
@@ -77,6 +77,9 @@ export default {
     },
     placeholder() {
       return this.precision > 0 ? `0,${'0'.repeat(this.precision)}` : '0';
+    },
+    inputListeners() {
+      return { ...this.$listeners, input: this.onInput };
     },
   },
 }
