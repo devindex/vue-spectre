@@ -1193,6 +1193,12 @@ var script$3 = {
   computed: {
     pattern() {
       return '00/00/0000';
+    },
+
+    inputListeners() {
+      return { ...this.$listeners,
+        input: this.onInput
+      };
     }
 
   }
@@ -1209,7 +1215,7 @@ var __vue_render__$3 = function () {
 
   var _c = _vm._self._c || _h;
 
-  return _c('input', {
+  return _c('input', _vm._g({
     ref: "input",
     staticClass: "form-input",
     attrs: {
@@ -1218,11 +1224,8 @@ var __vue_render__$3 = function () {
     },
     domProps: {
       "value": _vm.display
-    },
-    on: {
-      "input": _vm.onInput
     }
-  });
+  }, _vm.inputListeners));
 };
 
 var __vue_staticRenderFns__$3 = [];
@@ -1326,6 +1329,12 @@ var script$4 = {
 
     placeholder() {
       return this.precision > 0 ? `0,${'0'.repeat(this.precision)}` : '0';
+    },
+
+    inputListeners() {
+      return { ...this.$listeners,
+        input: this.onInput
+      };
     }
 
   }
@@ -1342,7 +1351,7 @@ var __vue_render__$4 = function () {
 
   var _c = _vm._self._c || _h;
 
-  return _c('input', {
+  return _c('input', _vm._g({
     ref: "input",
     staticClass: "form-input text-right",
     attrs: {
@@ -1351,11 +1360,8 @@ var __vue_render__$4 = function () {
     },
     domProps: {
       "value": _vm.display
-    },
-    on: {
-      "input": _vm.onInput
     }
-  });
+  }, _vm.inputListeners));
 };
 
 var __vue_staticRenderFns__$4 = [];
