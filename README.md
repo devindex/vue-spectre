@@ -99,6 +99,8 @@ Vue.use(VueSpectre);
 | items | Array |  | true |
 | label | String |  | true (when item is an array of objects) |
 | max-height | Number | 300 | false |
+| direction | String | left | false |
+| disabled | Boolean | false | false |
 
 | Event name | Attributes |
 | ---------- | ------ |

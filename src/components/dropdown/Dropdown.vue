@@ -34,6 +34,10 @@
       maxHeight: {
         type: Number,
         default: 300,
+      },
+      disabled: {
+        type: Boolean,
+        default: false,
       }
     },
     data() {
@@ -49,10 +53,12 @@
         this.active ? this.deactivate() : this.activate();
       },
       activate() {
-        this.active = true;
-        setTimeout(() => (
-          document.addEventListener('click', this.deactivate)
-        ), 1);
+        if (!this.disabled) {
+          this.active = true;
+          setTimeout(() => (
+            document.addEventListener('click', this.deactivate)
+          ), 1);
+        }
       },
       deactivate() {
         this.active = false;
@@ -71,6 +77,7 @@
         return {
           active: this.active,
           'dropdown-right': this.direction === 'right',
+          'dropdown-disabled': this.disabled,
         }
       },
       menuStyles() {
