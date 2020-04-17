@@ -825,6 +825,10 @@ var script$2 = {
     maxHeight: {
       type: Number,
       default: 300
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data: function data() {
@@ -842,10 +846,12 @@ var script$2 = {
     activate: function activate() {
       var _this = this;
 
-      this.active = true;
-      setTimeout(function () {
-        return document.addEventListener('click', _this.deactivate);
-      }, 1);
+      if (!this.disabled) {
+        this.active = true;
+        setTimeout(function () {
+          return document.addEventListener('click', _this.deactivate);
+        }, 1);
+      }
     },
     deactivate: function deactivate() {
       this.active = false;
@@ -863,7 +869,8 @@ var script$2 = {
     classes: function classes() {
       return {
         active: this.active,
-        'dropdown-right': this.direction === 'right'
+        'dropdown-right': this.direction === 'right',
+        'dropdown-disabled': this.disabled
       };
     },
     menuStyles: function menuStyles() {
@@ -913,7 +920,7 @@ var __vue_inject_styles__$2 = undefined;
 var __vue_scope_id__$2 = undefined;
 /* module identifier */
 
-var __vue_module_identifier__$2 = "data-v-747397fa";
+var __vue_module_identifier__$2 = "data-v-231a6f64";
 /* functional template */
 
 var __vue_is_functional_template__$2 = false;

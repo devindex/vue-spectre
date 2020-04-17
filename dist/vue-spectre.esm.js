@@ -984,6 +984,10 @@ var script$2 = {
     maxHeight: {
       type: Number,
       default: 300
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -1003,8 +1007,10 @@ var script$2 = {
     },
 
     activate() {
-      this.active = true;
-      setTimeout(() => document.addEventListener('click', this.deactivate), 1);
+      if (!this.disabled) {
+        this.active = true;
+        setTimeout(() => document.addEventListener('click', this.deactivate), 1);
+      }
     },
 
     deactivate() {
@@ -1026,7 +1032,8 @@ var script$2 = {
     classes() {
       return {
         active: this.active,
-        'dropdown-right': this.direction === 'right'
+        'dropdown-right': this.direction === 'right',
+        'dropdown-disabled': this.disabled
       };
     },
 
