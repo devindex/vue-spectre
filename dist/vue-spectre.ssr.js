@@ -1207,7 +1207,7 @@ var __vue_component__$4 = normalizeComponent({
 }, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, undefined, undefined, undefined);//
 var script$5 = {
   props: {
-    show: {
+    value: {
       type: Boolean,
       default: false
     },
@@ -1239,7 +1239,7 @@ var script$5 = {
     this.$nextTick(function () {
       document.body.appendChild(_this.$el);
 
-      if (_this.show) {
+      if (_this.value) {
         _this.activate();
       }
     });
@@ -1248,8 +1248,8 @@ var script$5 = {
     this.$el.remove();
   },
   watch: {
-    show: function show(value) {
-      value ? this.activate() : this.deactivate();
+    value: function value(_value) {
+      _value ? this.activate() : this.deactivate();
     }
   },
   methods: {
@@ -1274,7 +1274,7 @@ var script$5 = {
       }
     },
     closeListener: function closeListener(e) {
-      if (this.show && e.keyCode === 27 && this.activeModals[this.activeModals.length - 1] === this.hash) {
+      if (this.value && e.keyCode === 27 && this.activeModals[this.activeModals.length - 1] === this.hash) {
         this.close();
       }
     },
@@ -1285,7 +1285,7 @@ var script$5 = {
     },
     close: function close() {
       if (this.closable) {
-        this.$emit('close');
+        this.$emit('input');
       }
     }
   },
@@ -1315,7 +1315,7 @@ var __vue_render__$5 = function __vue_render__() {
     attrs: {
       "name": "modal"
     }
-  }, [_vm.show ? _c('div', {
+  }, [_vm.value ? _c('div', {
     staticClass: "modal active",
     class: _vm.classes
   }, [_c('div', {
@@ -1346,7 +1346,7 @@ var __vue_staticRenderFns__$5 = [];
 
 var __vue_inject_styles__$5 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-6f915396_0", {
+  inject("data-v-838eddd8_0", {
     source: ".modal.active.modal-enter-active{transition:all .15s}.modal.active.modal-leave-active{transition:all .3s}.modal.active.modal-enter,.modal.active.modal-leave-to{opacity:0}",
     map: undefined,
     media: undefined
@@ -1358,7 +1358,7 @@ var __vue_inject_styles__$5 = function __vue_inject_styles__(inject) {
 var __vue_scope_id__$5 = undefined;
 /* module identifier */
 
-var __vue_module_identifier__$5 = "data-v-6f915396";
+var __vue_module_identifier__$5 = "data-v-838eddd8";
 /* functional template */
 
 var __vue_is_functional_template__$5 = false;

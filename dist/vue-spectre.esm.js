@@ -1426,7 +1426,7 @@ const __vue_component__$4 = normalizeComponent({
 //
 var script$5 = {
   props: {
-    show: {
+    value: {
       type: Boolean,
       default: false
     },
@@ -1458,7 +1458,7 @@ var script$5 = {
     this.$nextTick(() => {
       document.body.appendChild(this.$el);
 
-      if (this.show) {
+      if (this.value) {
         this.activate();
       }
     });
@@ -1469,7 +1469,7 @@ var script$5 = {
   },
 
   watch: {
-    show(value) {
+    value(value) {
       value ? this.activate() : this.deactivate();
     }
 
@@ -1496,7 +1496,7 @@ var script$5 = {
     },
 
     closeListener(e) {
-      if (this.show && e.keyCode === 27 && this.activeModals[this.activeModals.length - 1] === this.hash) {
+      if (this.value && e.keyCode === 27 && this.activeModals[this.activeModals.length - 1] === this.hash) {
         this.close();
       }
     },
@@ -1509,7 +1509,7 @@ var script$5 = {
 
     close() {
       if (this.closable) {
-        this.$emit('close');
+        this.$emit('input');
       }
     }
 
@@ -1543,7 +1543,7 @@ var __vue_render__$5 = function () {
     attrs: {
       "name": "modal"
     }
-  }, [_vm.show ? _c('div', {
+  }, [_vm.value ? _c('div', {
     staticClass: "modal active",
     class: _vm.classes
   }, [_c('div', {
@@ -1574,7 +1574,7 @@ var __vue_staticRenderFns__$5 = [];
 
 const __vue_inject_styles__$5 = function (inject) {
   if (!inject) return;
-  inject("data-v-6f915396_0", {
+  inject("data-v-838eddd8_0", {
     source: ".modal.active.modal-enter-active{transition:all .15s}.modal.active.modal-leave-active{transition:all .3s}.modal.active.modal-enter,.modal.active.modal-leave-to{opacity:0}",
     map: undefined,
     media: undefined
