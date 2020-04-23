@@ -1509,7 +1509,7 @@ var script$5 = {
 
     close() {
       if (this.closable) {
-        this.$emit('input');
+        this.$emit('input', false);
       }
     }
 
@@ -1574,7 +1574,7 @@ var __vue_staticRenderFns__$5 = [];
 
 const __vue_inject_styles__$5 = function (inject) {
   if (!inject) return;
-  inject("data-v-838eddd8_0", {
+  inject("data-v-333875b1_0", {
     source: ".modal.active.modal-enter-active{transition:all .15s}.modal.active.modal-leave-active{transition:all .3s}.modal.active.modal-enter,.modal.active.modal-leave-to{opacity:0}",
     map: undefined,
     media: undefined

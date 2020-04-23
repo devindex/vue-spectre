@@ -1285,7 +1285,7 @@ var script$5 = {
     },
     close: function close() {
       if (this.closable) {
-        this.$emit('input');
+        this.$emit('input', false);
       }
     }
   },
@@ -1346,7 +1346,7 @@ var __vue_staticRenderFns__$5 = [];
 
 var __vue_inject_styles__$5 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-838eddd8_0", {
+  inject("data-v-333875b1_0", {
     source: ".modal.active.modal-enter-active{transition:all .15s}.modal.active.modal-leave-active{transition:all .3s}.modal.active.modal-enter,.modal.active.modal-leave-to{opacity:0}",
     map: undefined,
     media: undefined
@@ -1358,7 +1358,7 @@ var __vue_inject_styles__$5 = function __vue_inject_styles__(inject) {
 var __vue_scope_id__$5 = undefined;
 /* module identifier */
 
-var __vue_module_identifier__$5 = "data-v-838eddd8";
+var __vue_module_identifier__$5 = "data-v-333875b1";
 /* functional template */
 
 var __vue_is_functional_template__$5 = false;
