@@ -1,7 +1,7 @@
 <template>
   <div class="columns">
     <div class="column col-5">
-      <dx-calendar :date="date" @select="select" />
+      <dx-calendar v-model="date"></dx-calendar>
     </div>
     <div class="column col-7">
       <div class="form-group">
@@ -17,11 +17,6 @@
     data() {
       return {
         date: new Date(),
-      }
-    },
-    methods: {
-      select({ date }) {
-        this.date = date;
       }
     },
   }
