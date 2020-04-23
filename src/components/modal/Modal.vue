@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition name="modal">
-      <div class="modal active" :class="classes" v-if="show">
+      <div class="modal active" :class="classes" v-if="value">
         <div class="modal-overlay" @click="overlayClick"></div>
         <div class="modal-container">
           <div class="modal-header">
@@ -27,7 +27,7 @@ import { randomHash, initConfig } from '../../utils';
 
 export default {
   props: {
-    show: {
+    value: {
       type: Boolean,
       default: false
     },
@@ -57,7 +57,7 @@ export default {
     this.$nextTick(() => {
       document.body.appendChild(this.$el);
 
-      if (this.show) {
+      if (this.value) {
         this.activate();
       }
     })
@@ -66,7 +66,7 @@ export default {
     this.$el.remove();
   },
   watch: {
-    show(value) {
+    value(value) {
       value ? this.activate() : this.deactivate();
     }
   },
@@ -89,7 +89,7 @@ export default {
     },
     closeListener(e) {
       if (
-        this.show
+        this.value
         && e.keyCode === 27
         && this.activeModals[this.activeModals.length - 1] === this.hash
       ) {
@@ -103,7 +103,7 @@ export default {
     },
     close() {
       if (this.closable) {
-        this.$emit('close');
+        this.$emit('input');
       }
     }
   },
