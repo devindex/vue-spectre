@@ -123,24 +123,18 @@ Input number
 
 ```html
 <dx-modal
-    :show="show"
-    title="Modal"
-    @close="show = false">
+    v-model="show"
+    title="Modal">
     ...
 </dx-modal>
 ```
 
 | Property name | Type | Default | Required |
 | ------------- | ---- | ------- | -------- |
-| show | Boolean |  | true |
 | title | String |  | false |
 | closable | Boolean | `true` | false |
 | size | String |  | false |
 | click-to-close | Boolean | `false` | false |
-
-| Event name | Attributes |
-| ---------- | ------ |
-| close | -- |
 
 ### Pagination
 
