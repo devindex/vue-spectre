@@ -63,15 +63,11 @@ Vue.use(VueSpectre);
 ### Calendar
 
 ```html
-<dx-calendar
-    :date="date"
-    @select="onSelect">
-</dx-calendar>
+<dx-calendar v-model="date" />
 ```
 
 | Property name | Type | Default | Required |
 | ------------- | ---- | ------- | -------- |
-| date | Date |  | true |
 | min | Date | `null` | false |
 | max | Date | `null` | false |
 | highlights | Array | `[]` | false |
@@ -82,6 +78,11 @@ Vue.use(VueSpectre);
 | prev | `()` |
 | next | `()` |
 | month-change | `()` |
+
+| Slots |
+| ---------- |
+| prev-nav |
+| next-nav |
 
 ### Dropdown
 
