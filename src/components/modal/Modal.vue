@@ -103,7 +103,7 @@ export default {
     },
     close() {
       if (this.closable) {
-        this.$emit('input');
+        this.$emit('input', false);
       }
     }
   },
