@@ -620,48 +620,79 @@ const __vue_component__ = normalizeComponent({
   staticRenderFns: __vue_staticRenderFns__
 }, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, false, createInjector, undefined, undefined);
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+const config = {
+  locale: 'en'
+};
+function initConfig(key, value) {
+  if (!(key in config)) {
+    config[key] = value;
+  }
+
+  return config[key];
+}
+function getConfig(key) {
+  return key in config ? config[key] : null;
+}
+function setConfig(key, value) {
+  config[key] = value;
+}
+function randomHash() {
+  return Math.random().toString(32).slice(-8);
+}
+function registerComponent(Vue, name, def) {
+  const tagName = `dx${name}`.replace(/[A-Z]/g, c => `-${c.toLowerCase()}`);
+  Vue.component(tagName, def);
+}
+function registerComponents(Vue, components = {}) {
+  for (const component in components) {
+    registerComponent(Vue, component, components[component]);
+  }
+}
+
+const base = {
+  daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+};
+const data = {
+  en: base,
+  'pt-br': { ...base,
+    daysOfWeek: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+    months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+  }
+};
+function get(lang) {
+  lang = lang.toLowerCase();
+  return lang in data ? data[lang] : base;
+}
+
 //
 var script$1 = {
   props: {
-    date: Date,
-    min: Date,
-    max: Date,
+    value: {
+      type: Date
+    },
+    min: {
+      type: Date
+    },
+    max: {
+      type: Date
+    },
     highlights: {
       type: Array,
       default: () => []
+    },
+    daysOfWeek: {
+      type: Array,
+      default: () => get(getConfig('locale')).daysOfWeek
+    },
+    months: {
+      type: Array,
+      default: () => get(getConfig('locale')).months
     }
   },
 
   data() {
     return {
-      daysOfWeek: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-      months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
       today: this.onlyDate(new Date()),
       month: this.onlyDate(new Date(), true, true),
       days: []
@@ -669,12 +700,12 @@ var script$1 = {
   },
 
   mounted() {
-    this.setMonth(this.date || new Date());
+    this.setMonth(this.value || new Date());
     this.mount();
   },
 
   watch: {
-    date(date) {
+    value(date) {
       this.setMonth(date);
       this.mount();
     },
@@ -686,7 +717,7 @@ var script$1 = {
   },
   methods: {
     reset() {
-      this.month = this.onlyDate(this.date, true, true);
+      this.month = this.onlyDate(this.value, true, true);
       this.mount();
     },
 
@@ -722,6 +753,7 @@ var script$1 = {
 
     select(item) {
       const data = Object.assign({}, item);
+      this.$emit('input', data.date);
       delete data.ctrl;
       this.$emit('select', data);
     },
@@ -813,8 +845,8 @@ var script$1 = {
     },
 
     isActive(date) {
-      if (this.date) {
-        return this.onlyDate(this.date, true).getTime() === date.getTime();
+      if (this.value) {
+        return this.onlyDate(this.value, true).getTime() === date.getTime();
       }
 
       return false;
@@ -876,13 +908,11 @@ var __vue_render__$1 = function () {
       "disabled": !_vm.canPrev
     },
     on: {
-      "click": function ($event) {
-        return _vm.prev();
-      }
+      "click": _vm.prev
     }
-  }, [_c('i', {
+  }, [_vm._t("prev-nav", [_c('i', {
     staticClass: "icon icon-arrow-left"
-  })]), _vm._v(" "), _c('div', {
+  })])], 2), _vm._v(" "), _c('div', {
     staticClass: "navbar-primary"
   }, [_vm._v(_vm._s(_vm.headerTitle))]), _vm._v(" "), _c('button', {
     staticClass: "btn btn-action btn-link",
@@ -890,13 +920,11 @@ var __vue_render__$1 = function () {
       "disabled": !_vm.canNext
     },
     on: {
-      "click": function ($event) {
-        return _vm.next();
-      }
+      "click": _vm.next
     }
-  }, [_c('i', {
+  }, [_vm._t("next-nav", [_c('i', {
     staticClass: "icon icon-arrow-right"
-  })])]), _vm._v(" "), _c('div', {
+  })])], 2)]), _vm._v(" "), _c('div', {
     staticClass: "calendar-container"
   }, [_c('div', {
     staticClass: "calendar-header"
@@ -1394,27 +1422,6 @@ const __vue_component__$4 = normalizeComponent({
   render: __vue_render__$4,
   staticRenderFns: __vue_staticRenderFns__$4
 }, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, undefined, undefined, undefined);
-
-const config = {};
-function initConfig(key, value) {
-  if (!(key in config)) {
-    config[key] = value;
-  }
-
-  return config[key];
-}
-function randomHash() {
-  return Math.random().toString(32).slice(-8);
-}
-function registerComponent(Vue, name, def) {
-  const tagName = `dx${name}`.replace(/[A-Z]/g, c => `-${c.toLowerCase()}`);
-  Vue.component(tagName, def);
-}
-function registerComponents(Vue, components = {}) {
-  for (const component in components) {
-    registerComponent(Vue, component, components[component]);
-  }
-}
 
 //
 var script$5 = {
@@ -2009,10 +2016,16 @@ var components = /*#__PURE__*/Object.freeze({
   Tab: __vue_component__$8
 });
 
-function install(Vue) {
+function install(Vue, params = {}) {
+  params = { ...params
+  };
   if (install.installed) return;
   install.installed = true;
   registerComponents(Vue, components);
+
+  if ('locale' in params) {
+    setConfig('locale', params.locale);
+  }
 } // Create module definition for Vue.use()
 
 

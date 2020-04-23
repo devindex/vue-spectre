@@ -1,4 +1,51 @@
-'use strict';Object.defineProperty(exports,'__esModule',{value:true});function _interopDefault(e){return(e&&(typeof e==='object')&&'default'in e)?e['default']:e}var StringMask=_interopDefault(require('string-mask'));//
+'use strict';Object.defineProperty(exports,'__esModule',{value:true});function _interopDefault(e){return(e&&(typeof e==='object')&&'default'in e)?e['default']:e}var StringMask=_interopDefault(require('string-mask'));function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}//
 //
 //
 //
@@ -480,108 +527,95 @@ var __vue_is_functional_template__ = false;
 var __vue_component__ = normalizeComponent({
   render: __vue_render__,
   staticRenderFns: __vue_staticRenderFns__
-}, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, false, undefined, createInjectorSSR, undefined);function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
+}, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, false, undefined, createInjectorSSR, undefined);var config = {
+  locale: 'en'
+};
+function initConfig(key, value) {
+  if (!(key in config)) {
+    config[key] = value;
   }
 
-  return obj;
+  return config[key];
 }
-
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
+function getConfig(key) {
+  return key in config ? config[key] : null;
 }
+function setConfig(key, value) {
+  config[key] = value;
+}
+function randomHash() {
+  return Math.random().toString(32).slice(-8);
+}
+function registerComponent(Vue, name, def) {
+  var tagName = "dx".concat(name).replace(/[A-Z]/g, function (c) {
+    return "-".concat(c.toLowerCase());
+  });
+  Vue.component(tagName, def);
+}
+function registerComponents(Vue) {
+  var components = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
+  for (var component in components) {
+    registerComponent(Vue, component, components[component]);
   }
-
-  return target;
-}//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var script$1 = {
+}var base = {
+  daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+};
+var data = {
+  en: base,
+  'pt-br': _objectSpread2({}, base, {
+    daysOfWeek: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+    months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+  })
+};
+function get(lang) {
+  lang = lang.toLowerCase();
+  return lang in data ? data[lang] : base;
+}var script$1 = {
   props: {
-    date: Date,
-    min: Date,
-    max: Date,
+    value: {
+      type: Date
+    },
+    min: {
+      type: Date
+    },
+    max: {
+      type: Date
+    },
     highlights: {
       type: Array,
       default: function _default() {
         return [];
       }
+    },
+    daysOfWeek: {
+      type: Array,
+      default: function _default() {
+        return get(getConfig('locale')).daysOfWeek;
+      }
+    },
+    months: {
+      type: Array,
+      default: function _default() {
+        return get(getConfig('locale')).months;
+      }
     }
   },
   data: function data() {
     return {
-      daysOfWeek: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-      months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
       today: this.onlyDate(new Date()),
       month: this.onlyDate(new Date(), true, true),
       days: []
     };
   },
   mounted: function mounted() {
-    this.setMonth(this.date || new Date());
+    this.setMonth(this.value || new Date());
     this.mount();
   },
   watch: {
-    date: function date(_date) {
-      this.setMonth(_date);
+    value: function value(date) {
+      this.setMonth(date);
       this.mount();
     },
     highlights: function highlights() {
@@ -590,7 +624,7 @@ var script$1 = {
   },
   methods: {
     reset: function reset() {
-      this.month = this.onlyDate(this.date, true, true);
+      this.month = this.onlyDate(this.value, true, true);
       this.mount();
     },
     setMonth: function setMonth(date) {
@@ -621,6 +655,7 @@ var script$1 = {
     },
     select: function select(item) {
       var data = Object.assign({}, item);
+      this.$emit('input', data.date);
       delete data.ctrl;
       this.$emit('select', data);
     },
@@ -711,8 +746,8 @@ var script$1 = {
       return enabled;
     },
     isActive: function isActive(date) {
-      if (this.date) {
-        return this.onlyDate(this.date, true).getTime() === date.getTime();
+      if (this.value) {
+        return this.onlyDate(this.value, true).getTime() === date.getTime();
       }
 
       return false;
@@ -758,14 +793,18 @@ var __vue_render__$1 = function __vue_render__() {
 
   return _c('div', {
     staticClass: "calendar"
-  }, [_vm._ssrNode("<div class=\"calendar-nav navbar\"><button" + _vm._ssrAttr("disabled", !_vm.canPrev) + " class=\"btn btn-action btn-link\"><i class=\"icon icon-arrow-left\"></i></button> <div class=\"navbar-primary\">" + _vm._ssrEscape(_vm._s(_vm.headerTitle)) + "</div> <button" + _vm._ssrAttr("disabled", !_vm.canNext) + " class=\"btn btn-action btn-link\"><i class=\"icon icon-arrow-right\"></i></button></div> <div class=\"calendar-container\"><div class=\"calendar-header\">" + _vm._ssrList(_vm.daysOfWeek, function (day) {
+  }, [_vm._ssrNode("<div class=\"calendar-nav navbar\">", "</div>", [_vm._ssrNode("<button" + _vm._ssrAttr("disabled", !_vm.canPrev) + " class=\"btn btn-action btn-link\">", "</button>", [_vm._t("prev-nav", [_c('i', {
+    staticClass: "icon icon-arrow-left"
+  })])], 2), _vm._ssrNode(" <div class=\"navbar-primary\">" + _vm._ssrEscape(_vm._s(_vm.headerTitle)) + "</div> "), _vm._ssrNode("<button" + _vm._ssrAttr("disabled", !_vm.canNext) + " class=\"btn btn-action btn-link\">", "</button>", [_vm._t("next-nav", [_c('i', {
+    staticClass: "icon icon-arrow-right"
+  })])], 2)], 2), _vm._ssrNode(" <div class=\"calendar-container\"><div class=\"calendar-header\">" + _vm._ssrList(_vm.daysOfWeek, function (day) {
     return "<div class=\"calendar-date\">" + _vm._ssrEscape(_vm._s(day)) + "</div>";
   }) + "</div> <div class=\"calendar-body\">" + _vm._ssrList(_vm.days, function (day) {
     return "<div" + _vm._ssrClass("calendar-date", _vm.dayClasses(day)) + "><button" + _vm._ssrClass("date-item", {
       'date-today': day.isToday,
       active: _vm.isActive(day.date)
     }) + ">" + _vm._ssrEscape("\n          " + _vm._s(day.day) + "\n        ") + "</button></div>";
-  }) + "</div></div>")]);
+  }) + "</div></div>")], 2);
 };
 
 var __vue_staticRenderFns__$1 = [];
@@ -777,7 +816,7 @@ var __vue_inject_styles__$1 = undefined;
 var __vue_scope_id__$1 = undefined;
 /* module identifier */
 
-var __vue_module_identifier__$1 = "data-v-5d88f181";
+var __vue_module_identifier__$1 = "data-v-58b5d04a";
 /* functional template */
 
 var __vue_is_functional_template__$1 = false;
@@ -1165,30 +1204,7 @@ var __vue_is_functional_template__$4 = false;
 var __vue_component__$4 = normalizeComponent({
   render: __vue_render__$4,
   staticRenderFns: __vue_staticRenderFns__$4
-}, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, undefined, undefined, undefined);var config = {};
-function initConfig(key, value) {
-  if (!(key in config)) {
-    config[key] = value;
-  }
-
-  return config[key];
-}
-function randomHash() {
-  return Math.random().toString(32).slice(-8);
-}
-function registerComponent(Vue, name, def) {
-  var tagName = "dx".concat(name).replace(/[A-Z]/g, function (c) {
-    return "-".concat(c.toLowerCase());
-  });
-  Vue.component(tagName, def);
-}
-function registerComponents(Vue) {
-  var components = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-  for (var component in components) {
-    registerComponent(Vue, component, components[component]);
-  }
-}//
+}, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, undefined, undefined, undefined);//
 var script$5 = {
   props: {
     show: {
@@ -1671,9 +1687,15 @@ var __vue_component__$8 = normalizeComponent({
   render: __vue_render__$8,
   staticRenderFns: __vue_staticRenderFns__$8
 }, __vue_inject_styles__$8, __vue_script__$8, __vue_scope_id__$8, __vue_is_functional_template__$8, __vue_module_identifier__$8, false, undefined, undefined, undefined);var components=/*#__PURE__*/Object.freeze({__proto__:null,Autocomplete: __vue_component__,Calendar: __vue_component__$1,Dropdown: __vue_component__$2,InputNumber: __vue_component__$4,InputDate: __vue_component__$3,Modal: __vue_component__$5,Pagination: __vue_component__$6,Tabs: __vue_component__$7,Tab: __vue_component__$8});function install(Vue) {
+  var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  params = _objectSpread2({}, params);
   if (install.installed) return;
   install.installed = true;
   registerComponents(Vue, components);
+
+  if ('locale' in params) {
+    setConfig('locale', params.locale);
+  }
 } // Create module definition for Vue.use()
 
 
