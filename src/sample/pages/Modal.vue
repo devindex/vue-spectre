@@ -2,7 +2,7 @@
   <div>
     <button class="btn btn-primary" @click="show1 = true">Show modal</button>
 
-    <dx-modal :show="show1" title="Modal" @close="show1 = false">
+    <dx-modal v-model="show1" title="Modal">
       <p>
         Mussum Ipsum, cacilds vidis litro abertis. Si u mundo tá muito paradis?
         Toma um mé que o mundo vai girarzis! Detraxit consequat et quo num tendi nada.
@@ -21,7 +21,7 @@
       </template>
     </dx-modal>
 
-    <dx-modal :show="show2" title="Another modal" @close="show2 = false" size="sm">
+    <dx-modal v-model="show2" title="Another modal" size="sm">
       <p class="mb-0">
         Per aumento de cachacis, eu reclamis. Admodum accumsan disputationi eu sit.
         Vide electram sadipscing et per. Detraxit consequat et quo num tendi nada.
@@ -42,11 +42,6 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td>show</td>
-        <td>Boolean</td>
-        <td><code>false</code></td>
-      </tr>
       <tr>
         <td>title</td>
         <td>String</td>
