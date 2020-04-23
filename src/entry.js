@@ -1,11 +1,16 @@
 import * as components from 'src/components/index';
-import { registerComponents } from './utils';
+import { registerComponents, setConfig } from './utils';
 
 // install function executed by Vue.use()
-function install(Vue) {
+function install(Vue, params = {}) {
+  params = { ...params };
   if (install.installed) return;
   install.installed = true;
   registerComponents(Vue, components);
+
+  if ('locale' in params) {
+    setConfig('locale', params.locale);
+  }
 }
 
 // Create module definition for Vue.use()

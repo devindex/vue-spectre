@@ -1,4 +1,6 @@
-const config = {};
+const config = {
+  locale: 'en',
+};
 
 export function initConfig(key, value) {
   if (!(key in config)) {
