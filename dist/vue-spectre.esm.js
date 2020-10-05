@@ -615,7 +615,7 @@ const __vue_is_functional_template__ = false;
 
 /* style inject shadow dom */
 
-const __vue_component__ = normalizeComponent({
+const __vue_component__ = /*#__PURE__*/normalizeComponent({
   render: __vue_render__,
   staticRenderFns: __vue_staticRenderFns__
 }, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, false, createInjector, undefined, undefined);
@@ -972,7 +972,7 @@ const __vue_is_functional_template__$1 = false;
 
 /* style inject shadow dom */
 
-const __vue_component__$1 = normalizeComponent({
+const __vue_component__$1 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$1,
   staticRenderFns: __vue_staticRenderFns__$1
 }, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, false, undefined, undefined, undefined);
@@ -1154,7 +1154,7 @@ const __vue_is_functional_template__$2 = false;
 
 /* style inject shadow dom */
 
-const __vue_component__$2 = normalizeComponent({
+const __vue_component__$2 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$2,
   staticRenderFns: __vue_staticRenderFns__$2
 }, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, false, undefined, undefined, undefined);
@@ -1282,7 +1282,7 @@ const __vue_is_functional_template__$3 = false;
 
 /* style inject shadow dom */
 
-const __vue_component__$3 = normalizeComponent({
+const __vue_component__$3 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$3,
   staticRenderFns: __vue_staticRenderFns__$3
 }, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, false, undefined, undefined, undefined);
@@ -1418,7 +1418,7 @@ const __vue_is_functional_template__$4 = false;
 
 /* style inject shadow dom */
 
-const __vue_component__$4 = normalizeComponent({
+const __vue_component__$4 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$4,
   staticRenderFns: __vue_staticRenderFns__$4
 }, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, undefined, undefined, undefined);
@@ -1560,9 +1560,9 @@ var __vue_render__$5 = function () {
     on: {
       "click": _vm.close
     }
-  }) : _vm._e(), _vm._v(" "), _vm.title ? _c('div', {
+  }) : _vm._e(), _vm._v(" "), _vm._t("header", [_vm.title ? _c('div', {
     staticClass: "modal-title"
-  }, [_vm._v(_vm._s(_vm.title))]) : _vm._e()]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.title))]) : _vm._e()])], 2), _vm._v(" "), _c('div', {
     staticClass: "modal-body"
   }, [_vm._t("default")], 2), _vm._v(" "), _c('div', {
     staticClass: "modal-footer"
@@ -1574,7 +1574,7 @@ var __vue_staticRenderFns__$5 = [];
 
 const __vue_inject_styles__$5 = function (inject) {
   if (!inject) return;
-  inject("data-v-333875b1_0", {
+  inject("data-v-dd7be90a_0", {
     source: ".modal.active.modal-enter-active{transition:all .15s}.modal.active.modal-leave-active{transition:all .3s}.modal.active.modal-enter,.modal.active.modal-leave-to{opacity:0}",
     map: undefined,
     media: undefined
@@ -1594,7 +1594,7 @@ const __vue_is_functional_template__$5 = false;
 
 /* style inject shadow dom */
 
-const __vue_component__$5 = normalizeComponent({
+const __vue_component__$5 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$5,
   staticRenderFns: __vue_staticRenderFns__$5
 }, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, createInjector, undefined, undefined);
@@ -1779,7 +1779,7 @@ const __vue_is_functional_template__$6 = false;
 
 /* style inject shadow dom */
 
-const __vue_component__$6 = normalizeComponent({
+const __vue_component__$6 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$6,
   staticRenderFns: __vue_staticRenderFns__$6
 }, __vue_inject_styles__$6, __vue_script__$6, __vue_scope_id__$6, __vue_is_functional_template__$6, __vue_module_identifier__$6, false, undefined, undefined, undefined);
@@ -1911,7 +1911,7 @@ const __vue_is_functional_template__$7 = false;
 
 /* style inject shadow dom */
 
-const __vue_component__$7 = normalizeComponent({
+const __vue_component__$7 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$7,
   staticRenderFns: __vue_staticRenderFns__$7
 }, __vue_inject_styles__$7, __vue_script__$7, __vue_scope_id__$7, __vue_is_functional_template__$7, __vue_module_identifier__$7, false, createInjector, undefined, undefined);
@@ -1996,7 +1996,7 @@ const __vue_is_functional_template__$8 = false;
 
 /* style inject shadow dom */
 
-const __vue_component__$8 = normalizeComponent({
+const __vue_component__$8 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$8,
   staticRenderFns: __vue_staticRenderFns__$8
 }, __vue_inject_styles__$8, __vue_script__$8, __vue_scope_id__$8, __vue_is_functional_template__$8, __vue_module_identifier__$8, false, undefined, undefined, undefined);

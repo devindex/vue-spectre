@@ -524,7 +524,7 @@ var __vue_module_identifier__ = "data-v-4b48fbb1";
 var __vue_is_functional_template__ = false;
 /* style inject shadow dom */
 
-var __vue_component__ = normalizeComponent({
+var __vue_component__ = /*#__PURE__*/normalizeComponent({
   render: __vue_render__,
   staticRenderFns: __vue_staticRenderFns__
 }, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, false, undefined, createInjectorSSR, undefined);var config = {
@@ -564,7 +564,7 @@ function registerComponents(Vue) {
 };
 var data = {
   en: base,
-  'pt-br': _objectSpread2({}, base, {
+  'pt-br': _objectSpread2(_objectSpread2({}, base), {}, {
     daysOfWeek: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
     months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
   })
@@ -826,7 +826,7 @@ var __vue_is_functional_template__$1 = false;
 
 /* style inject shadow dom */
 
-var __vue_component__$1 = normalizeComponent({
+var __vue_component__$1 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$1,
   staticRenderFns: __vue_staticRenderFns__$1
 }, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, false, undefined, undefined, undefined);//
@@ -969,7 +969,7 @@ var __vue_is_functional_template__$2 = false;
 
 /* style inject shadow dom */
 
-var __vue_component__$2 = normalizeComponent({
+var __vue_component__$2 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$2,
   staticRenderFns: __vue_staticRenderFns__$2
 }, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, false, undefined, undefined, undefined);var script$3 = {
@@ -1034,7 +1034,7 @@ var __vue_component__$2 = normalizeComponent({
       return '00/00/0000';
     },
     inputListeners: function inputListeners() {
-      return _objectSpread2({}, this.$listeners, {
+      return _objectSpread2(_objectSpread2({}, this.$listeners), {}, {
         input: this.onInput
       });
     }
@@ -1082,7 +1082,7 @@ var __vue_is_functional_template__$3 = false;
 
 /* style inject shadow dom */
 
-var __vue_component__$3 = normalizeComponent({
+var __vue_component__$3 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$3,
   staticRenderFns: __vue_staticRenderFns__$3
 }, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, false, undefined, undefined, undefined);var script$4 = {
@@ -1153,7 +1153,7 @@ var __vue_component__$3 = normalizeComponent({
       return this.precision > 0 ? "0,".concat('0'.repeat(this.precision)) : '0';
     },
     inputListeners: function inputListeners() {
-      return _objectSpread2({}, this.$listeners, {
+      return _objectSpread2(_objectSpread2({}, this.$listeners), {}, {
         input: this.onInput
       });
     }
@@ -1201,7 +1201,7 @@ var __vue_is_functional_template__$4 = false;
 
 /* style inject shadow dom */
 
-var __vue_component__$4 = normalizeComponent({
+var __vue_component__$4 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$4,
   staticRenderFns: __vue_staticRenderFns__$4
 }, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, undefined, undefined, undefined);//
@@ -1332,9 +1332,9 @@ var __vue_render__$5 = function __vue_render__() {
     on: {
       "click": _vm.close
     }
-  }) : _vm._e(), _vm._v(" "), _vm.title ? _c('div', {
+  }) : _vm._e(), _vm._v(" "), _vm._t("header", [_vm.title ? _c('div', {
     staticClass: "modal-title"
-  }, [_vm._v(_vm._s(_vm.title))]) : _vm._e()]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.title))]) : _vm._e()])], 2), _vm._v(" "), _c('div', {
     staticClass: "modal-body"
   }, [_vm._t("default")], 2), _vm._v(" "), _c('div', {
     staticClass: "modal-footer"
@@ -1346,7 +1346,7 @@ var __vue_staticRenderFns__$5 = [];
 
 var __vue_inject_styles__$5 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-333875b1_0", {
+  inject("data-v-dd7be90a_0", {
     source: ".modal.active.modal-enter-active{transition:all .15s}.modal.active.modal-leave-active{transition:all .3s}.modal.active.modal-enter,.modal.active.modal-leave-to{opacity:0}",
     map: undefined,
     media: undefined
@@ -1358,13 +1358,13 @@ var __vue_inject_styles__$5 = function __vue_inject_styles__(inject) {
 var __vue_scope_id__$5 = undefined;
 /* module identifier */
 
-var __vue_module_identifier__$5 = "data-v-333875b1";
+var __vue_module_identifier__$5 = "data-v-dd7be90a";
 /* functional template */
 
 var __vue_is_functional_template__$5 = false;
 /* style inject shadow dom */
 
-var __vue_component__$5 = normalizeComponent({
+var __vue_component__$5 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$5,
   staticRenderFns: __vue_staticRenderFns__$5
 }, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, undefined, createInjectorSSR, undefined);//
@@ -1500,7 +1500,7 @@ var __vue_is_functional_template__$6 = false;
 
 /* style inject shadow dom */
 
-var __vue_component__$6 = normalizeComponent({
+var __vue_component__$6 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$6,
   staticRenderFns: __vue_staticRenderFns__$6
 }, __vue_inject_styles__$6, __vue_script__$6, __vue_scope_id__$6, __vue_is_functional_template__$6, __vue_module_identifier__$6, false, undefined, undefined, undefined);//
@@ -1605,7 +1605,7 @@ var __vue_module_identifier__$7 = "data-v-97753820";
 var __vue_is_functional_template__$7 = false;
 /* style inject shadow dom */
 
-var __vue_component__$7 = normalizeComponent({
+var __vue_component__$7 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$7,
   staticRenderFns: __vue_staticRenderFns__$7
 }, __vue_inject_styles__$7, __vue_script__$7, __vue_scope_id__$7, __vue_is_functional_template__$7, __vue_module_identifier__$7, false, undefined, createInjectorSSR, undefined);//
@@ -1683,7 +1683,7 @@ var __vue_is_functional_template__$8 = false;
 
 /* style inject shadow dom */
 
-var __vue_component__$8 = normalizeComponent({
+var __vue_component__$8 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$8,
   staticRenderFns: __vue_staticRenderFns__$8
 }, __vue_inject_styles__$8, __vue_script__$8, __vue_scope_id__$8, __vue_is_functional_template__$8, __vue_module_identifier__$8, false, undefined, undefined, undefined);var components=/*#__PURE__*/Object.freeze({__proto__:null,Autocomplete: __vue_component__,Calendar: __vue_component__$1,Dropdown: __vue_component__$2,InputNumber: __vue_component__$4,InputDate: __vue_component__$3,Modal: __vue_component__$5,Pagination: __vue_component__$6,Tabs: __vue_component__$7,Tab: __vue_component__$8});function install(Vue) {
