@@ -6,7 +6,9 @@
         <div class="modal-container">
           <div class="modal-header">
             <button class="btn btn-clear float-right" v-if="closable" @click="close" />
-            <div class="modal-title" v-if="title">{{ title }}</div>
+            <slot name="header">
+              <div class="modal-title" v-if="title">{{ title }}</div>
+            </slot>
           </div>
 
           <div class="modal-body">

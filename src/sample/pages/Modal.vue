@@ -21,7 +21,11 @@
       </template>
     </dx-modal>
 
-    <dx-modal v-model="show2" title="Another modal" size="sm">
+    <dx-modal v-model="show2" size="sm">
+      <div class="header-title" slot="header">
+        <span class="text-primary">Modal</span>
+        <small class="text-gray"> (with custom header)</small>
+      </div>
       <p class="mb-0">
         Per aumento de cachacis, eu reclamis. Admodum accumsan disputationi eu sit.
         Vide electram sadipscing et per. Detraxit consequat et quo num tendi nada.
