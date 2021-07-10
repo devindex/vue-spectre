@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import { getConfig } from '../../utils';
 import { get as getLang } from './i18n';
 
 export default {
@@ -51,11 +50,11 @@ export default {
     },
     daysOfWeek: {
       type: Array,
-      default: () => getLang(getConfig('locale')).daysOfWeek,
+      default: () => getLang('daysOfWeek'),
     },
     months: {
       type: Array,
-      default: () => getLang(getConfig('locale')).months,
+      default: () => getLang('months'),
     },
   },
   data() {

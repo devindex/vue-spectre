@@ -1,3 +1,5 @@
+import { getLocale } from '@/config';
+
 const base = {
   daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
   months: [
@@ -38,9 +40,15 @@ const data = {
   },
 };
 
-export function get(lang) {
-  lang = lang.toLowerCase();
-  return lang in data ? data[lang] : base;
+export function get(key = null) {
+  const locale = getLocale();
+  const language = locale in data ? data[locale] : base;
+
+  if (key !== null) {
+    return key in language ? language[key] : null;
+  }
+
+  return language;
 }
 
 export default data;

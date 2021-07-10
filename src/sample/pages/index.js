@@ -9,46 +9,46 @@ import Tabs from './Tabs';
 // import Toast from './Toast';
 
 export default [
-  {
-    id: 'autocomplete',
-    name: 'Autocomplete',
-    component: Autocomplete,
-  },
+  // {
+  //   id: 'autocomplete',
+  //   name: 'Autocomplete',
+  //   component: Autocomplete,
+  // },
   {
     id: 'calendar',
     name: 'Calendar',
     component: Calendar,
   },
-  {
-    id: 'dropdown',
-    name: 'Dropdown',
-    component: Dropdown,
-  },
-  {
-    id: 'inputs',
-    name: 'Inputs',
-    component: Inputs,
-  },
-  {
-    id: 'modal',
-    name: 'Modal',
-    component: Modal,
-  },
+  // {
+  //   id: 'dropdown',
+  //   name: 'Dropdown',
+  //   component: Dropdown,
+  // },
+  // {
+  //   id: 'inputs',
+  //   name: 'Inputs',
+  //   component: Inputs,
+  // },
+  // {
+  //   id: 'modal',
+  //   name: 'Modal',
+  //   component: Modal,
+  // },
   // {
   //   id: 'notification',
   //   name: 'Notification',
   //   component: Notification,
   // },
-  {
-    id: 'pagination',
-    name: 'Pagination',
-    component: Pagination,
-  },
-  {
-    id: 'tabs',
-    name: 'Tabs',
-    component: Tabs,
-  },
+  // {
+  //   id: 'pagination',
+  //   name: 'Pagination',
+  //   component: Pagination,
+  // },
+  // {
+  //   id: 'tabs',
+  //   name: 'Tabs',
+  //   component: Tabs,
+  // },
   // {
   //   id: 'toast',
   //   name: 'Toast',
