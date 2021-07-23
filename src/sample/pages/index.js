@@ -1,57 +1,58 @@
-import Autocomplete from './Autocomplete';
+import { shallowRef } from 'vue';
+// import Autocomplete from './Autocomplete';
 import Calendar from './Calendar';
-import Dropdown from './Dropdown';
-import Inputs from './Inputs';
-import Modal from './Modal';
+// import Dropdown from './Dropdown';
+// import Inputs from './Inputs';
+// import Modal from './Modal';
 // import Notification from './Notification';
-import Pagination from './Pagination';
-import Tabs from './Tabs';
+// import Pagination from './Pagination';
+// import Tabs from './Tabs';
 // import Toast from './Toast';
 
 export default [
   // {
   //   id: 'autocomplete',
   //   name: 'Autocomplete',
-  //   component: Autocomplete,
+  //   component: shallowRef(Autocomplete),
   // },
   {
     id: 'calendar',
     name: 'Calendar',
-    component: Calendar,
+    component: shallowRef(Calendar),
   },
   // {
   //   id: 'dropdown',
   //   name: 'Dropdown',
-  //   component: Dropdown,
+  //   component: shallowRef(Dropdown),
   // },
   // {
   //   id: 'inputs',
   //   name: 'Inputs',
-  //   component: Inputs,
+  //   component: shallowRef(Inputs),
   // },
   // {
   //   id: 'modal',
   //   name: 'Modal',
-  //   component: Modal,
+  //   component: shallowRef(Modal),
   // },
   // {
   //   id: 'notification',
   //   name: 'Notification',
-  //   component: Notification,
+  //   component: shallowRef(Notification),
   // },
   // {
   //   id: 'pagination',
   //   name: 'Pagination',
-  //   component: Pagination,
+  //   component: shallowRef(Pagination),
   // },
   // {
   //   id: 'tabs',
   //   name: 'Tabs',
-  //   component: Tabs,
+  //   component: shallowRef(Tabs),
   // },
   // {
   //   id: 'toast',
   //   name: 'Toast',
-  //   component: Toast,
+  //   component: shallowRef(Toast),
   // },
 ];

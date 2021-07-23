@@ -34,8 +34,9 @@
 import { get as getLang } from './i18n';
 
 export default {
+  emits: ['update:modelValue', 'select', 'month-change'],
   props: {
-    value: {
+    modelValue: {
       type: Date,
     },
     min: {
@@ -65,11 +66,11 @@ export default {
     }
   },
   mounted() {
-    this.setMonth(this.value || new Date());
+    this.setMonth(this.modelValue || new Date());
     this.mount();
   },
   watch: {
-    value(date) {
+    modelValue(date) {
       this.setMonth(date);
       this.mount();
     },
@@ -79,7 +80,7 @@ export default {
   },
   methods: {
     reset() {
-      this.month = this.onlyDate(this.value, true, true);
+      this.month = this.onlyDate(this.modelValue, true, true);
       this.mount();
     },
     setMonth(date) {
@@ -110,7 +111,7 @@ export default {
     },
     select(item) {
       const data = Object.assign({}, item);
-      this.$emit('input', data.date);
+      this.$emit('update:modelValue', data.date);
       delete data.ctrl;
       this.$emit('select', data);
     },
@@ -204,8 +205,8 @@ export default {
       return enabled;
     },
     isActive(date) {
-      if (this.value) {
-        return this.onlyDate(this.value, true).getTime() === date.getTime()
+      if (this.modelValue) {
+        return this.onlyDate(this.modelValue, true).getTime() === date.getTime()
       }
       return false;
     },

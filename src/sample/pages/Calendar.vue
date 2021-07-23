@@ -13,13 +13,13 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        date: new Date(),
-      }
-    },
-  }
+export default {
+  data() {
+    return {
+      date: new Date(),
+    }
+  },
+}
 </script>
 
 <style>
