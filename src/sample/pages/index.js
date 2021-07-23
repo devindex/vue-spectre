@@ -5,7 +5,7 @@ import Calendar from './Calendar';
 // import Inputs from './Inputs';
 // import Modal from './Modal';
 // import Notification from './Notification';
-// import Pagination from './Pagination';
+import Pagination from './Pagination';
 // import Tabs from './Tabs';
 // import Toast from './Toast';
 
@@ -40,11 +40,11 @@ export default [
   //   name: 'Notification',
   //   component: shallowRef(Notification),
   // },
-  // {
-  //   id: 'pagination',
-  //   name: 'Pagination',
-  //   component: shallowRef(Pagination),
-  // },
+  {
+    id: 'pagination',
+    name: 'Pagination',
+    component: shallowRef(Pagination),
+  },
   // {
   //   id: 'tabs',
   //   name: 'Tabs',
