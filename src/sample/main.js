@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import VueHighlight from 'vue-highlightjs';
+import VueHighlight from 'vue3-highlightjs';
 import VueSpectre from '../entry';
 import 'spectre.css/dist/spectre.css';
 import 'spectre.css/dist/spectre-exp.css';

@@ -42,7 +42,7 @@
     "spectre.css": "^0.5.9",
     "string-mask": "^0.3.0",
     "vue": "^3.0.5",
-    "vue-highlightjs": "^1.3.3"
+    "vue3-highlightjs": "^1.0.5"
   },
   "peerDependencies": {
     "vue": "^3.0.5"
