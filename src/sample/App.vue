@@ -1,22 +1,24 @@
 <template>
-  <div id="app" class="off-canvas off-canvas-sidebar-show">
+  <div class="off-canvas off-canvas-sidebar-show">
     <div class="off-canvas-sidebar">
       <div class="sidebar-content">
         <h1 class="h3">Elements</h1>
         <a
           class="menu-item"
           v-for="page in pages"
-          :href="`#${page.id}`"
+          :href="page.path"
+          @click.prevent="routeTo(page.path)"
         >{{ page.name }}</a>
       </div>
     </div>
+
     <div class="off-canvas-content">
       <div class="main-content">
-        <template v-for="{ name, component, id } in pages">
-          <div class="page-content" v-if="component" :id="id">
-            <h2 class="h4">{{ name }}</h2>
-            <component :is="component" />
-          </div>
+        <component v-if="currentPage" :is="currentPage.component" />
+        <template v-else>
+          <h2 class="h4">Not found</h2>
+
+          <div>Page not found</div>
         </template>
       </div>
     </div>
@@ -29,8 +31,25 @@ import pages from './pages';
 export default {
   data() {
     return {
-      pages: pages,
+      currentRoute: window.location.pathname,
+      pages,
     }
+  },
+  mounted() {
+    window.onpopstate = () => {
+      this.currentRoute = window.location.pathname;
+    };
+  },
+  computed: {
+    currentPage() {
+      return pages.find(({ path }) => path === this.currentRoute);
+    },
+  },
+  methods: {
+    routeTo(path) {
+      this.currentRoute = path;
+      window.history.pushState({}, '', path);
+    },
   },
 };
 </script>
@@ -48,14 +67,28 @@ export default {
   display: block;
   padding: $layout-spacing-sm 0;
 }
-.off-canvas-content {
-  overflow-y: auto;
+.off-canvas {
+  .off-canvas-content {
+    overflow-y: auto;
+    padding: 0;
+  }
 }
 .main-content {
   max-width: $size-md;
-  padding: $layout-spacing-lg 0;
+  padding: 0 0 $layout-spacing-lg 0;
+  margin: 0 auto;
   .page-content {
     padding-bottom: $control-size-lg * 2;
+  }
+  .s-title {
+    border-bottom: $border-width solid $gray-color-light;
+    line-height: 1.8rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 99;
   }
 }
 </style>

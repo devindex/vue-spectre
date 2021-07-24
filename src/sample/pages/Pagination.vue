@@ -1,41 +1,13 @@
 <template>
-  <div>
-    <dx-pagination
-      :total="total"
-      :limit="limit"
-      :numbers="numbers"
-    />
+  <h3 class="s-title">Pagination</h3>
 
-    <pre v-highlightjs="code"><code class="html"></code></pre>
+  <dx-pagination
+    :total="total"
+    :limit="limit"
+    :numbers="numbers"
+  ></dx-pagination>
 
-    <p class="mt-2 mb-0 text-gray">Properties</p>
-    <table class="table table-hover">
-      <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Default</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>total</td>
-        <td>Number</td>
-        <td><code>0</code></td>
-      </tr>
-      <tr>
-        <td>limit</td>
-        <td>Number</td>
-        <td><code>20</code></td>
-      </tr>
-      <tr>
-        <td>numbers</td>
-        <td>Number</td>
-        <td><code>11</code></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+  <pre v-highlightjs="code"><code class="html"></code></pre>
 </template>
 
 <script>
@@ -45,7 +17,11 @@ export default {
       total: 500,
       limit: 20,
       numbers: 11,
-      code: `<dx-pagination :total="total" :limit="limit" :numbers="numbers"></dx-pagination>`,
+      code: `<dx-pagination
+    :total="total"
+    :limit="limit"
+    :numbers="numbers"
+></dx-pagination>`,
     };
   },
 }
