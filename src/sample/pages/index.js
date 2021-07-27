@@ -5,7 +5,7 @@ import Calendar from './Calendar';
 // import Modal from './Modal';
 // import Notification from './Notification';
 import Pagination from './Pagination';
-// import Tabs from './Tabs';
+import Tabs from './Tabs';
 // import Toast from './Toast';
 
 export default [
@@ -44,11 +44,11 @@ export default [
     name: 'Pagination',
     component: Pagination,
   },
-  // {
-  //   path: '/tabs',
-  //   name: 'Tabs',
-  //   component: Tabs,
-  // },
+  {
+    path: '/tabs',
+    name: 'Tabs',
+    component: Tabs,
+  },
   // {
   //   path: '/toast',
   //   name: 'Toast',

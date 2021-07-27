@@ -1,28 +1,34 @@
 <template>
-  <section class="tab-panel" v-show="isActive" :aria-hidden="!isActive" :id="hash" role="tabpanel">
-    <slot></slot>
-  </section>
+  <section
+    class="tab-panel"
+    v-show="isActive"
+    :aria-hidden="!isActive"
+    :id="`tab-${id}`"
+    role="tabpanel"
+  ><slot></slot></section>
 </template>
 
 <script>
-  export default {
-    props: {
-      id: { default: null },
-      name: { required: true }
+import { randomHash } from  '@/utils';
+
+export default {
+  props: {
+    id: {
+      type: String,
+      default: randomHash,
     },
-    data () {
-      return {
-        isActive: false
-      }
+    label: {
+      type: String,
+      required: true,
     },
-    computed: {
-      hash () {
-        if (this.id) {
-          return this.id;
-        } else {
-          return this.name.toLowerCase().replace(/ /g, '-');
-        }
-      }
-    }
-  }
+  },
+  data() {
+    return {
+      isActive: false,
+    };
+  },
+  created() {
+    this.$parent.tabs.push(this);
+  },
+}
 </script>

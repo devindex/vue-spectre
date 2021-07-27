@@ -1,8 +1,8 @@
 <template>
   <div class="tabs-container">
-    <ul class="tab" :class="{'tab-block': this.block}">
-      <li class="tab-item" v-for="tab in tabs" :class="{active: tab.isActive}">
-        <a href="#" @click.prevent="selectTab(tab.hash)">{{ tab.name }}</a>
+    <ul class="tab" :class="{ 'tab-block': this.block }">
+      <li class="tab-item" v-for="tab in tabs" :class="{ active: tab.isActive }">
+        <a href="#" @click.prevent="selectTab(tab.id)">{{ tab.label }}</a>
       </li>
     </ul>
     <slot></slot>
@@ -10,57 +10,57 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      block: {
-        type: Boolean,
-        default: false
+export default {
+  emits: ['change'],
+  props: {
+    block: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      tabs: [],
+      activeTabId: undefined
+    }
+  },
+  mounted () {
+    if (this.tabs.length) {
+      this.selectTab(this.tabs[0].id);
+    }
+  },
+  methods: {
+    findTab(id) {
+      return this.tabs.find(tab => tab.id === id);
+    },
+    selectTab(selectedTabId) {
+      const selectedTab = this.findTab(selectedTabId);
+      if (!selectedTab) {
+        return;
       }
-    },
-    data () {
-      return {
-        tabs: [],
-        activeTabHash: ''
-      }
-    },
-    created () {
-      this.tabs = this.$children;
-    },
-    mounted () {
-      if (this.tabs.length) {
-        this.selectTab(this.tabs[0].hash);
-      }
-    },
-    methods: {
-      findTab(hash) {
-        return this.tabs.find(tab => tab.hash === hash);
-      },
-      selectTab(selectedTabHash) {
-        const selectedTab = this.findTab(selectedTabHash);
-        if (! selectedTab) {
-          return;
-        }
 
-        this.tabs.forEach(tab => {
-          tab.isActive = (tab.hash === selectedTab.hash);
-        });
+      this.tabs.forEach(tab => {
+        tab.isActive = tab.id === selectedTab.id;
+      });
 
-        this.$emit('change', { tab: selectedTab });
-        this.activeTabHash = selectedTab.hash;
-      },
-      activeTab () {
-        return this.activeTabHash;
+      if (this.activeTabId !== undefined) {
+        this.$emit('change', { id: this.activeTabId });
       }
+      this.activeTabId = selectedTab.id;
+    },
+    activeTab () {
+      return this.activeTabId;
     }
   }
+}
 </script>
 
 <style lang="scss">
-  .tab {
-    .tab-item {
-      a:focus {
-        box-shadow: none;
-      }
+.tab {
+  .tab-item {
+    a:focus {
+      box-shadow: none;
     }
   }
+}
 </style>
