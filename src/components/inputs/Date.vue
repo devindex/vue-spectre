@@ -2,8 +2,8 @@
   <input
     type="text"
     class="form-input"
+    v-bind="inputAttrs"
     :value="display"
-    v-on="inputListeners"
     :placeholder="pattern"
     ref="input"
   >
@@ -13,8 +13,10 @@
 import StringMask from 'string-mask';
 
 export default {
+  inheritAttrs: false,
+  emits: ['update:modelValue'],
   props: {
-    value: {
+    modelValue: {
       type: String,
     },
   },
@@ -33,7 +35,7 @@ export default {
     },
   },
   created() {
-    this.display = this.mask(this.value, true);
+    this.display = this.mask(this.modelValue, true);
   },
   methods: {
     onInput(e) {
@@ -48,7 +50,7 @@ export default {
 
       if (outValue !== this.lastValue) {
         this.lastValue = outValue;
-        this.$emit('input', outValue)
+        this.$emit('update:modelValue', outValue)
       }
     },
     mask(value, parse = false) {
@@ -77,8 +79,8 @@ export default {
     pattern() {
       return '00/00/0000';
     },
-    inputListeners() {
-      return { ...this.$listeners, input: this.onInput };
+    inputAttrs() {
+      return { ...this.$attrs, onInput: this.onInput };
     },
   },
 }

@@ -2,8 +2,8 @@
   <input
     type="text"
     class="form-input text-right"
+    v-bind="inputAttrs"
     :value="display"
-    v-on="inputListeners"
     :placeholder="placeholder"
     ref="input"
   >
@@ -13,8 +13,10 @@
 import StringMask from 'string-mask';
 
 export default {
+  inheritAttrs: false,
+  emits: ['update:modelValue'],
   props: {
-    value: {
+    modelValue: {
       type: [Number, String],
     },
     precision: {
@@ -37,7 +39,7 @@ export default {
     },
   },
   created() {
-    this.display = this.mask(this.value);
+    this.display = this.mask(this.modelValue);
   },
   methods: {
     onInput(e) {
@@ -52,7 +54,7 @@ export default {
 
       if (numberValue !== this.lastValue) {
         this.lastValue = numberValue;
-        this.$emit('input', numberValue)
+        this.$emit('update:modelValue', numberValue)
       }
     },
     mask(value) {
@@ -78,8 +80,8 @@ export default {
     placeholder() {
       return this.precision > 0 ? `0,${'0'.repeat(this.precision)}` : '0';
     },
-    inputListeners() {
-      return { ...this.$listeners, input: this.onInput };
+    inputAttrs() {
+      return { ...this.$attrs, onInput: this.onInput };
     },
   },
 }

@@ -1,40 +1,54 @@
 <template>
-  <div class="columns">
-    <div class="column col-5">
-      <label for="input-date" class="form-label">Input Date (Brazil):</label>
-      <dx-input-date v-model="date" id="input-date" />
-    </div>
-    <div class="column col-7">
-      <div class="form-group">
-        <label class="form-label">Output</label>
-        <input type="text" class="form-input" :value="date" readonly>
+  <h3 class="s-title">Form inputs</h3>
+
+  <section class="component-section">
+    <h4 class="section-title">Input date (dd/mm/yyyy)</h4>
+
+    <div class="columns">
+      <div class="column col-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+          <dx-input-date v-model="date" id="input-date" />
+          <input type="text" class="form-input text-center text-gray" :value="date" readonly>
+        </div>
       </div>
     </div>
 
-    <div class="column col-5">
-      <label for="input-number" class="form-label">Input Number (Brazil):</label>
-      <dx-input-number v-model="number" id="input-number" :precision="2" />
-    </div>
-    <div class="column col-7">
-      <div class="form-group">
-        <label class="form-label">Output</label>
-        <input type="text" class="form-input" :value="number" readonly>
+    <sample-code :code="code.inputDate"></sample-code>
+  </section>
+
+  <section class="component-section">
+    <h4 class="section-title">Input number (Brazilian format)</h4>
+    <div class="columns">
+      <div class="column col-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+          <dx-input-number v-model="number" id="input-number" :precision="2" />
+          <input type="text" class="form-input text-center text-gray" :value="number" readonly>
+        </div>
       </div>
     </div>
-  </div>
+
+    <sample-code :code="code.inputNumber"></sample-code>
+  </section>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        date: new Date().toISOString().substring(0, 10),
-        number: 3.14,
-      }
-    },
-  }
+const inputDateCode = `<dx-input-date v-model="date"></dx-input-date>`;
+const inputNumberCode = `<dx-input-number v-model="number" :precision="2"></dx-input-number>`;
+
+export default {
+  data() {
+    return {
+      date: new Date().toISOString().substring(0, 10),
+      number: 3.14,
+      code: {
+        inputDate: inputDateCode,
+        inputNumber: inputNumberCode,
+      },
+    }
+  },
+}
 </script>
 
-<style>
+<style lang="scss">
 
 </style>
