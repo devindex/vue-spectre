@@ -75,7 +75,7 @@ export default {
 }
 .main-content {
   max-width: $size-md;
-  padding: 0 0 $layout-spacing-lg 0;
+  padding: 0 $layout-spacing-lg $layout-spacing-lg $layout-spacing-lg;
   margin: 0 auto;
   .page-content {
     padding-bottom: $control-size-lg * 2;
@@ -89,6 +89,17 @@ export default {
     position: sticky;
     top: 0;
     z-index: 99;
+  }
+  .component-section {
+    margin-bottom: $unit-16;
+    .section-title {
+      color: $primary-color-dark;
+      font-size: $font-size-lg;
+      font-weight: normal;
+    }
+    &:last-of-type {
+      margin-bottom: 0;
+    }
   }
 }
 </style>
