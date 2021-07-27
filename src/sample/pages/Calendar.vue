@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <pre v-highlightjs="code"><code class="html"></code></pre>
+  <sample-code :code="code"></sample-code>
 </template>
 
 <script>
