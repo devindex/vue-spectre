@@ -1,6 +1,6 @@
 // import Autocomplete from './Autocomplete';
 import Calendar from './Calendar';
-// import Dropdown from './Dropdown';
+import Dropdown from './Dropdown';
 import Inputs from './Inputs';
 // import Modal from './Modal';
 // import Notification from './Notification';
@@ -19,11 +19,11 @@ export default [
     name: 'Calendar',
     component: Calendar,
   },
-  // {
-  //   path: '/dropdown',
-  //   name: 'Dropdown',
-  //   component: Dropdown,
-  // },
+  {
+    path: '/dropdown',
+    name: 'Dropdown',
+    component: Dropdown,
+  },
   {
     path: '/inputs',
     name: 'Inputs',

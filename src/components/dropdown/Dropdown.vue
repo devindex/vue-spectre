@@ -16,75 +16,76 @@
 </template>
 
 <script>
-  export default {
-    name: 'Dropdown',
-    props: {
-      items: {
-        type: Array,
-        default: [],
-      },
-      label: {
-        type: String,
-      },
-      direction: {
-        type: String,
-        enum: ['left', 'right'],
-        default: 'left',
-      },
-      maxHeight: {
-        type: Number,
-        default: 300,
-      },
-      disabled: {
-        type: Boolean,
-        default: false,
+export default {
+  name: 'Dropdown',
+  emits: ['select'],
+  props: {
+    items: {
+      type: Array,
+      default: [],
+    },
+    label: {
+      type: String,
+    },
+    direction: {
+      type: String,
+      enum: ['left', 'right'],
+      default: 'left',
+    },
+    maxHeight: {
+      type: Number,
+      default: 300,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    }
+  },
+  data() {
+    return {
+      active: false
+    }
+  },
+  beforeDestroy() {
+    this.deactivate();
+  },
+  methods: {
+    toggle() {
+      this.active ? this.deactivate() : this.activate();
+    },
+    activate() {
+      if (!this.disabled) {
+        this.active = true;
+        setTimeout(() => (
+          document.addEventListener('click', this.deactivate)
+        ), 1);
       }
     },
-    data() {
-      return {
-        active: false
-      }
+    deactivate() {
+      this.active = false;
+      document.removeEventListener('click', this.deactivate)
     },
-    beforeDestroy() {
+    select(item) {
+      this.$emit('select', item);
       this.deactivate();
     },
-    methods: {
-      toggle() {
-        this.active ? this.deactivate() : this.activate();
-      },
-      activate() {
-        if (!this.disabled) {
-          this.active = true;
-          setTimeout(() => (
-            document.addEventListener('click', this.deactivate)
-          ), 1);
-        }
-      },
-      deactivate() {
-        this.active = false;
-        document.removeEventListener('click', this.deactivate)
-      },
-      select(item) {
-        this.$emit('select', item);
-        this.deactivate();
-      },
-      getLabel(item) {
-        return this.label ? item[this.label] : item;
+    getLabel(item) {
+      return this.label ? item[this.label] : item;
+    }
+  },
+  computed: {
+    classes() {
+      return {
+        active: this.active,
+        'dropdown-right': this.direction === 'right',
+        'dropdown-disabled': this.disabled,
       }
     },
-    computed: {
-      classes() {
-        return {
-          active: this.active,
-          'dropdown-right': this.direction === 'right',
-          'dropdown-disabled': this.disabled,
-        }
-      },
-      menuStyles() {
-        return {
-          maxHeight: `${this.maxHeight}px`,
-        }
+    menuStyles() {
+      return {
+        maxHeight: `${this.maxHeight}px`,
       }
     }
   }
+}
 </script>
