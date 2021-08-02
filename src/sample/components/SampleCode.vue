@@ -1,6 +1,6 @@
 <template>
   <div class="sample-code">
-    <div class="sample-code-title">Sample code</div>
+    <div class="sample-code-title" v-if="title">{{ title }}</div>
     <div class="sample-code-content">
       <pre v-highlightjs="code"><code :class="lang"></code></pre>
     </div>
@@ -16,6 +16,10 @@ export default {
     lang: {
       type: String,
       default: 'html'
+    },
+    title: {
+      type: String,
+      default: 'Sample code',
     },
   },
 };
