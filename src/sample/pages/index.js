@@ -1,3 +1,4 @@
+import Home from './Home';
 import Autocomplete from './Autocomplete';
 import Calendar from './Calendar';
 import Dropdown from './Dropdown';
@@ -9,6 +10,11 @@ import Tabs from './Tabs';
 // import Toast from './Toast';
 
 export default [
+  {
+    path: '/',
+    name: 'Home',
+    component: Home,
+  },
   {
     path: '/autocomplete',
     name: 'Autocomplete',
