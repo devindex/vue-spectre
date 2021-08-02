@@ -81,6 +81,7 @@ export default {
     padding-bottom: $control-size-lg * 2;
   }
   .s-title {
+    background-color: $light-color;
     border-bottom: $border-width solid $gray-color-light;
     line-height: 1.8rem;
     margin-bottom: 2rem;
