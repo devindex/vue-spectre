@@ -9,7 +9,7 @@ export function set(key, value) {
 }
 
 export function getOrSet(key, initialValue) {
-  if (!key in state) {
+  if (!(key in state)) {
     state[key] = initialValue;
   }
   return state[key];
