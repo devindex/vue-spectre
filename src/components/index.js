@@ -1,4 +1,4 @@
-// export { Autocomplete } from './autocomplete/index';
+export { Autocomplete } from './autocomplete/index';
 export { Calendar } from './calendar/index';
 export { Dropdown } from './dropdown/index';
 export { InputNumber, InputDate } from './inputs/index';

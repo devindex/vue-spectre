@@ -1,4 +1,4 @@
-// import Autocomplete from './Autocomplete';
+import Autocomplete from './Autocomplete';
 import Calendar from './Calendar';
 import Dropdown from './Dropdown';
 import Inputs from './Inputs';
@@ -9,11 +9,11 @@ import Tabs from './Tabs';
 // import Toast from './Toast';
 
 export default [
-  // {
-  //   path: '/autocomplete',
-  //   name: 'Autocomplete',
-  //   component: Autocomplete,
-  // },
+  {
+    path: '/autocomplete',
+    name: 'Autocomplete',
+    component: Autocomplete,
+  },
   {
     path: '/calendar',
     name: 'Calendar',
