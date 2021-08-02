@@ -1,8 +1,40 @@
 <template>
-  <div>
-    <button class="btn btn-primary" @click="show1 = true">Show modal</button>
+  <h3 class="s-title">Modal</h3>
 
-    <dx-modal v-model="show1" title="Modal">
+  <section class="component-section">
+    <h4 class="section-title">Basic</h4>
+
+    <button class="btn btn-primary" @click="item1.value = true">Open modal</button>
+
+    <dx-modal v-model="item1.value" title="Modal">
+      <p class="mb-0">
+        Mussum Ipsum, cacilds vidis litro abertis. Si u mundo tá muito paradis?
+        Toma um mé que o mundo vai girarzis! Detraxit consequat et quo num tendi nada.
+        Sapien in monti palavris qui num significa nadis i pareci latim.
+        Mais vale um bebadis conhecidiss, que um alcoolatra anonimis.
+      </p>
+
+      <template v-slot:footer>
+        <button class="btn btn-primary" @click="item1.value = false">Close</button>
+      </template>
+    </dx-modal>
+
+    <sample-code :code="item1.code"></sample-code>
+  </section>
+
+  <section class="component-section">
+    <h4 class="section-title">Advanced</h4>
+
+    <button class="btn btn-primary" @click="item2.value = true">Open modal</button>
+
+    <dx-modal v-model="item2.value" id="my-custom-id">
+      <template v-slot:header>
+        <div class="header-title">
+          <span class="text-primary">Modal</span>
+          <small class="text-gray"> (with custom header)</small>
+        </div>
+      </template>
+
       <p>
         Mussum Ipsum, cacilds vidis litro abertis. Si u mundo tá muito paradis?
         Toma um mé que o mundo vai girarzis! Detraxit consequat et quo num tendi nada.
@@ -15,83 +47,75 @@
         In elementis mé pra quem é amistosis quis leo. Admodum accumsan disputationi
         eu sit. Vide electram sadipscing et per.
       </p>
-      <template slot="footer">
-        <button class="btn mr-2" @click="show2 = true">Open another modal</button>
-        <button class="btn btn-primary" @click="show1 = false">Close</button>
+
+      <template v-slot:footer>
+        <button class="btn btn-error mr-2" @click="item2.value2 = true">Remove</button>
+        <button class="btn btn-primary" @click="item2.value = false">Close</button>
       </template>
     </dx-modal>
 
-    <dx-modal v-model="show2" size="sm">
-      <div class="header-title" slot="header">
-        <span class="text-primary">Modal</span>
-        <small class="text-gray"> (with custom header)</small>
+    <dx-modal v-model="item2.value2" size="sm" :closable="false">
+      <div class="text-center pt-2 pb-2">
+        <p class="mt-0 text-bold">
+          Do you really want to remove this?
+        </p>
+        <button class="btn mr-2" @click="item2.value2 = false">Cancel</button>
+        <button class="btn btn-error" @click="closeAll">Confirm</button>
       </div>
-      <p class="mb-0">
-        Per aumento de cachacis, eu reclamis. Admodum accumsan disputationi eu sit.
-        Vide electram sadipscing et per. Detraxit consequat et quo num tendi nada.
-        In elementis mé pra quem é amistosis quis leo.
-      </p>
-      <template slot="footer">
-        <button class="btn btn-primary" @click="show2 = false">Ok</button>
-      </template>
     </dx-modal>
 
-    <h3 class="h5 mt-2 mb-0">Properties</h3>
-    <table class="table table-hover">
-      <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Default</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>title</td>
-        <td>String</td>
-        <td><code>""</code></td>
-      </tr>
-      <tr>
-        <td>closable</td>
-        <td>Boolean</td>
-        <td><code>true</code></td>
-      </tr>
-      <tr>
-        <td>size</td>
-        <td>String</td>
-        <td><code>md</code></td>
-      </tr>
-      <tr>
-        <td>click-to-close</td>
-        <td>Boolean</td>
-        <td><code>false</code></td>
-      </tr>
-      </tbody>
-    </table>
-
-    <h3 class="h5 mt-2 mb-0">Events</h3>
-    <table class="table table-hover">
-      <thead>
-      <tr>
-        <th>Name</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>close</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+    <sample-code :code="item2.code"></sample-code>
+  </section>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        show1: false,
-        show2: false,
-      }
-    }
-  }
+const code1 = `<button class="btn" @click="value=true">Open modal</button>
+
+<dx-modal v-model="value" title="Modal">
+  Content here...
+
+  <template v-slot:footer>
+    <button class="btn" @click="value=false">Close</button>
+  </template>
+</dx-modal>`;
+
+const code2 = `<button class="btn" @click="value=true">Open modal</button>
+
+<dx-modal v-model="value" id="my-custom-id">
+  <template v-slot:header>
+    <div class="header-title">
+      <span class="text-primary">Modal</span>
+      <small class="text-gray"> (with custom header)</small>
+    </div>
+  </template>
+
+  Content here...
+
+  <template v-slot:footer>
+    <button class="btn" @click="value=false">Close</button>
+  </template>
+</dx-modal>`;
+
+export default {
+  data() {
+    return {
+      item1: {
+        value: false,
+        code: code1,
+      },
+      item2: {
+        value: false,
+        value2: false,
+        code: code2,
+      },
+    };
+  },
+  methods: {
+    closeAll() {
+      this.item1.value = false;
+      this.item2.value = false;
+      this.item2.value2 = false;
+    },
+  },
+}
 </script>

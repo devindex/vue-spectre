@@ -2,7 +2,7 @@ import Autocomplete from './Autocomplete';
 import Calendar from './Calendar';
 import Dropdown from './Dropdown';
 import Inputs from './Inputs';
-// import Modal from './Modal';
+import Modal from './Modal';
 // import Notification from './Notification';
 import Pagination from './Pagination';
 import Tabs from './Tabs';
@@ -29,11 +29,11 @@ export default [
     name: 'Inputs',
     component: Inputs,
   },
-  // {
-  //   path: '/modal',
-  //   name: 'Modal',
-  //   component: Modal,
-  // },
+  {
+    path: '/modal',
+    name: 'Modal',
+    component: Modal,
+  },
   // {
   //   path: '/notification',
   //   name: 'Notification',

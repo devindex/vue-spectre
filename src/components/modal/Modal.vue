@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <teleport to="body">
     <transition name="modal">
-      <div class="modal active" :class="classes" v-if="value">
+      <div class="modal active" :class="classes" v-bind="$attrs" v-if="modelValue">
         <div class="modal-overlay" @click="overlayClick"></div>
         <div class="modal-container">
-          <div class="modal-header">
+          <div class="modal-header" v-if="hasHeader">
             <button class="btn btn-clear float-right" v-if="closable" @click="close" />
             <slot name="header">
               <div class="modal-title" v-if="title">{{ title }}</div>
@@ -15,21 +15,24 @@
             <slot></slot>
           </div>
 
-          <div class="modal-footer">
+          <div class="modal-footer" v-if="hasFooter">
             <slot name="footer"></slot>
           </div>
         </div>
       </div>
     </transition>
-  </div>
+  </teleport>
 </template>
 
 <script>
-import { randomHash, initConfig } from '../../utils';
+import { getOrSet } from '@/store';
+import { randomHash } from '@/utils';
 
 export default {
+  inheritAttrs: false,
+  emits: ['update:modelValue'],
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       default: false
     },
@@ -52,24 +55,34 @@ export default {
   data() {
     return {
       hash: randomHash(),
-      activeModals: initConfig('activeModals', []),
+      activeModals: getOrSet('activeModals', []),
     }
   },
   mounted() {
-    this.$nextTick(() => {
-      document.body.appendChild(this.$el);
-
-      if (this.value) {
-        this.activate();
-      }
-    })
-  },
-  destroyed() {
-    this.$el.remove();
+    if (this.modelValue) {
+      this.activate();
+    }
   },
   watch: {
-    value(value) {
+    modelValue(value) {
       value ? this.activate() : this.deactivate();
+    }
+  },
+  computed: {
+    hasHeader() {
+      return this.closable || this.title || 'header' in this.$slots;
+    },
+    hasFooter() {
+      return 'footer' in this.$slots;
+    },
+    classes() {
+      const classes = [];
+
+      if (this.size !== null) {
+        classes.push(`modal-${this.size}`)
+      }
+
+      return classes;
     }
   },
   methods: {
@@ -91,7 +104,7 @@ export default {
     },
     closeListener(e) {
       if (
-        this.value
+        this.modelValue
         && e.keyCode === 27
         && this.activeModals[this.activeModals.length - 1] === this.hash
       ) {
@@ -105,35 +118,24 @@ export default {
     },
     close() {
       if (this.closable) {
-        this.$emit('input', false);
+        this.$emit('update:modelValue', false);
       }
     }
   },
-  computed: {
-    classes() {
-      const classes = [];
-
-      if (this.size !== null) {
-        classes.push(`modal-${this.size}`)
-      }
-
-      return classes;
-    }
-  }
 }
 </script>
 
 <style lang="scss">
-  .modal.active {
-    &.modal-enter-active {
-      transition: all .15s;
-    }
-    &.modal-leave-active {
-      transition: all .3s;
-    }
-    &.modal-enter,
-    &.modal-leave-to {
-      opacity: 0;
-    }
+.modal.active {
+  &.modal-enter-active {
+    transition: all .15s;
   }
+  &.modal-leave-active {
+    transition: all .3s;
+  }
+  &.modal-enter,
+  &.modal-leave-to {
+    opacity: 0;
+  }
+}
 </style>
