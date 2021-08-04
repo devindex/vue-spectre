@@ -46,7 +46,7 @@ export default {
       active: false
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.deactivate();
   },
   methods: {
