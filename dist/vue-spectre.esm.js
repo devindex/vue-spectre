@@ -1,56 +1,14 @@
-import StringMask from 'string-mask';
+import { openBlock, createBlock, createVNode, withModifiers, withDirectives, withKeys, vModelText, createCommentVNode, renderSlot, Fragment, renderList, toDisplayString, vShow, mergeProps, render as render$a, Teleport, Transition, withCtx } from 'vue';
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var script = {
+var script$9 = {
   name: 'Autocomplete',
+  emits: ['update:modelValue', 'select', 'focus', 'blur'],
   props: {
     source: {
       type: [Array, Function],
       default: () => []
     },
-    value: {
+    modelValue: {
       type: null
     },
     trackBy: {
@@ -111,11 +69,7 @@ var script = {
     },
     internalSearch: {
       type: Boolean,
-
-      default() {
-        return typeof this.source !== 'function';
-      }
-
+      default: undefined
     },
     keepOpen: {
       type: Boolean,
@@ -139,12 +93,55 @@ var script = {
 
   created() {
     this.updateDirection();
-    this.setSearch(this.value);
+    this.setSearch(this.modelValue);
   },
 
   watch: {
-    value(newValue) {
+    modelValue(newValue) {
       this.setSearch(newValue);
+    }
+
+  },
+  computed: {
+    availableItems() {
+      if (this.dynamic) {
+        return this.items;
+      }
+
+      if (this.internalSearch !== false && this.search) {
+        return this.source.filter(item => new RegExp(this.search, 'i').test(this.getLabel(item)));
+      }
+
+      return this.source;
+    },
+
+    hasItems() {
+      return this.availableItems.length > 0;
+    },
+
+    canUpdateItems() {
+      return this.search.length >= this.minLen;
+    },
+
+    canShow() {
+      return this.isOpen && this.hasItems || this.keepOpen;
+    },
+
+    canShowLoading() {
+      return this.loading || this.isLoading;
+    },
+
+    inputGroupClasses() {
+      return {
+        'has-icon-right': this.canShowLoading,
+        'input-group': 'action' in this.$slots
+      };
+    },
+
+    menuStyles() {
+      return {
+        maxHeight: `${this.maxHeight}px`
+      };
     }
 
   },
@@ -168,7 +165,7 @@ var script = {
 
     select(item) {
       this.setSearch(item);
-      this.$emit('input', item);
+      this.$emit('update:modelValue', item);
       this.$nextTick(() => {
         this.$emit('select', item);
       });
@@ -178,7 +175,7 @@ var script = {
       this.cursor = -1;
       this.activate();
       this.keepSearch = true;
-      this.$emit('input', null);
+      this.$emit('update:modelValue', null);
       this.updateItems();
     },
 
@@ -245,11 +242,11 @@ var script = {
     },
 
     isSelectedItem(item) {
-      if (this.value && item) {
+      if (this.modelValue && item) {
         if (typeof item === 'string') {
-          return this.value === item;
+          return this.modelValue === item;
         } else if (this.label) {
-          return this.value[this.label] === item[this.label];
+          return this.modelValue[this.label] === item[this.label];
         }
       }
 
@@ -283,370 +280,125 @@ var script = {
       });
     }
 
-  },
-  computed: {
-    availableItems() {
-      if (this.dynamic) {
-        return this.items;
-      }
-
-      if (this.internalSearch && this.search) {
-        return this.source.filter(item => new RegExp(this.search, 'i').test(this.getLabel(item)));
-      }
-
-      return this.source;
-    },
-
-    hasItems() {
-      return this.availableItems.length > 0;
-    },
-
-    canUpdateItems() {
-      return this.search.length >= this.minLen;
-    },
-
-    canShow() {
-      return this.isOpen && this.hasItems || this.keepOpen;
-    },
-
-    canShowLoading() {
-      return this.loading || this.isLoading;
-    },
-
-    inputGroupClasses() {
-      return {
-        'has-icon-right': this.canShowLoading,
-        'input-group': 'action' in this.$slots
-      };
-    },
-
-    menuStyles() {
-      return {
-        maxHeight: `${this.maxHeight}px`
-      };
-    }
-
   }
 };
 
-function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
-    if (typeof shadowMode !== 'boolean') {
-        createInjectorSSR = createInjector;
-        createInjector = shadowMode;
-        shadowMode = false;
-    }
-    // Vue.extend constructor export interop.
-    const options = typeof script === 'function' ? script.options : script;
-    // render functions
-    if (template && template.render) {
-        options.render = template.render;
-        options.staticRenderFns = template.staticRenderFns;
-        options._compiled = true;
-        // functional template
-        if (isFunctionalTemplate) {
-            options.functional = true;
-        }
-    }
-    // scopedId
-    if (scopeId) {
-        options._scopeId = scopeId;
-    }
-    let hook;
-    if (moduleIdentifier) {
-        // server build
-        hook = function (context) {
-            // 2.3 injection
-            context =
-                context || // cached call
-                    (this.$vnode && this.$vnode.ssrContext) || // stateful
-                    (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext); // functional
-            // 2.2 with runInNewContext: true
-            if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-                context = __VUE_SSR_CONTEXT__;
-            }
-            // inject component styles
-            if (style) {
-                style.call(this, createInjectorSSR(context));
-            }
-            // register component module identifier for async chunk inference
-            if (context && context._registeredComponents) {
-                context._registeredComponents.add(moduleIdentifier);
-            }
-        };
-        // used by ssr in case component is cached and beforeCreate
-        // never gets called
-        options._ssrRegister = hook;
-    }
-    else if (style) {
-        hook = shadowMode
-            ? function (context) {
-                style.call(this, createInjectorShadow(context, this.$root.$options.shadowRoot));
-            }
-            : function (context) {
-                style.call(this, createInjector(context));
-            };
-    }
-    if (hook) {
-        if (options.functional) {
-            // register for functional component in vue file
-            const originalRender = options.render;
-            options.render = function renderWithStyleInjection(h, context) {
-                hook.call(context);
-                return originalRender(h, context);
-            };
-        }
-        else {
-            // inject component registration as beforeCreate hook
-            const existing = options.beforeCreate;
-            options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
-        }
-    }
-    return script;
+const _hoisted_1$6 = {
+  class: "form-autocomplete"
+};
+const _hoisted_2$4 = {
+  key: 0,
+  class: "form-icon loading"
+};
+function render$9(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock("div", _hoisted_1$6, [createVNode("form", {
+    name: "autocomplete",
+    onSubmit: _cache[10] || (_cache[10] = withModifiers((...args) => $options.onKeyEnter && $options.onKeyEnter(...args), ["prevent", "stop"])),
+    autocomplete: "off"
+  }, [createVNode("div", {
+    class: $options.inputGroupClasses
+  }, [withDirectives(createVNode("input", {
+    type: "text",
+    class: ["form-input", $props.inputClass],
+    autocomplete: "off",
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => $data.search = $event),
+    id: $props.inputId,
+    disabled: $props.disabled,
+    readonly: $props.readonly,
+    placeholder: $props.placeholder,
+    onInput: _cache[2] || (_cache[2] = (...args) => $options.onInput && $options.onInput(...args)),
+    onFocus: _cache[3] || (_cache[3] = withModifiers((...args) => $options.onFocus && $options.onFocus(...args), ["prevent"])),
+    onBlur: _cache[4] || (_cache[4] = withModifiers((...args) => $options.onBlur && $options.onBlur(...args), ["prevent"])),
+    onKeyup: _cache[5] || (_cache[5] = withKeys(withModifiers((...args) => $options.deactivate && $options.deactivate(...args), ["prevent"]), ["esc"])),
+    onKeydown: [_cache[6] || (_cache[6] = withKeys((...args) => $options.onKeyEnter && $options.onKeyEnter(...args), ["tab"])), _cache[8] || (_cache[8] = withKeys(withModifiers((...args) => $options.onKeyDown && $options.onKeyDown(...args), ["prevent"]), ["down"])), _cache[9] || (_cache[9] = withKeys(withModifiers((...args) => $options.onKeyUp && $options.onKeyUp(...args), ["prevent"]), ["up"]))],
+    onKeypress: _cache[7] || (_cache[7] = withKeys(withModifiers((...args) => $options.onKeyEnter && $options.onKeyEnter(...args), ["prevent", "stop"]), ["enter"]))
+  }, null, 42, ["id", "disabled", "readonly", "placeholder"]), [[vModelText, $data.search]]), $options.canShowLoading ? (openBlock(), createBlock("i", _hoisted_2$4)) : createCommentVNode("", true), renderSlot(_ctx.$slots, "action")], 2)], 32), $options.canShow ? (openBlock(), createBlock("ul", {
+    key: 0,
+    class: ["menu", this.direction],
+    style: $options.menuStyles
+  }, [(openBlock(true), createBlock(Fragment, null, renderList($options.availableItems, (item, i) => {
+    return openBlock(), createBlock("li", {
+      class: ["menu-item", $options.itemClasses(item, i)],
+      onClick: $event => $options.select(item),
+      onMouseover: $event => $data.cursor = i
+    }, [renderSlot(_ctx.$slots, "default", {
+      item: item,
+      search: $data.search,
+      highlight: $options.highlightItem,
+      getLabel: $options.getLabel
+    }, () => [createVNode("a", {
+      innerHTML: $options.highlightItem($options.getLabel(item))
+    }, null, 8, ["innerHTML"])])], 42, ["onClick", "onMouseover"]);
+  }), 256))], 6)) : createCommentVNode("", true)]);
 }
 
-const isOldIE = typeof navigator !== 'undefined' &&
-    /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-function createInjector(context) {
-    return (id, style) => addStyle(id, style);
-}
-let HEAD;
-const styles = {};
-function addStyle(id, css) {
-    const group = isOldIE ? css.media || 'default' : id;
-    const style = styles[group] || (styles[group] = { ids: new Set(), styles: [] });
-    if (!style.ids.has(id)) {
-        style.ids.add(id);
-        let code = css.source;
-        if (css.map) {
-            // https://developer.chrome.com/devtools/docs/javascript-debugging
-            // this makes source maps inside style tags work properly in Chrome
-            code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
-            // http://stackoverflow.com/a/26603875
-            code +=
-                '\n/*# sourceMappingURL=data:application/json;base64,' +
-                    btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
-                    ' */';
-        }
-        if (!style.element) {
-            style.element = document.createElement('style');
-            style.element.type = 'text/css';
-            if (css.media)
-                style.element.setAttribute('media', css.media);
-            if (HEAD === undefined) {
-                HEAD = document.head || document.getElementsByTagName('head')[0];
-            }
-            HEAD.appendChild(style.element);
-        }
-        if ('styleSheet' in style.element) {
-            style.styles.push(code);
-            style.element.styleSheet.cssText = style.styles
-                .filter(Boolean)
-                .join('\n');
-        }
-        else {
-            const index = style.ids.size - 1;
-            const textNode = document.createTextNode(code);
-            const nodes = style.element.childNodes;
-            if (nodes[index])
-                style.element.removeChild(nodes[index]);
-            if (nodes.length)
-                style.element.insertBefore(textNode, nodes[index]);
-            else
-                style.element.appendChild(textNode);
-        }
+function styleInject(css, ref) {
+  if ( ref === void 0 ) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (!css || typeof document === 'undefined') { return; }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
     }
-}
-
-/* script */
-const __vue_script__ = script;
-/* template */
-
-var __vue_render__ = function () {
-  var _vm = this;
-
-  var _h = _vm.$createElement;
-
-  var _c = _vm._self._c || _h;
-
-  return _c('div', {
-    staticClass: "form-autocomplete"
-  }, [_c('form', {
-    attrs: {
-      "name": "autocomplete",
-      "autocomplete": "off"
-    },
-    on: {
-      "submit": function ($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        return _vm.onKeyEnter($event);
-      }
-    }
-  }, [_c('div', {
-    class: _vm.inputGroupClasses
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.search,
-      expression: "search"
-    }],
-    staticClass: "form-input",
-    class: _vm.inputClass,
-    attrs: {
-      "type": "text",
-      "autocomplete": "off",
-      "id": _vm.inputId,
-      "disabled": _vm.disabled,
-      "readonly": _vm.readonly,
-      "placeholder": _vm.placeholder
-    },
-    domProps: {
-      "value": _vm.search
-    },
-    on: {
-      "input": [function ($event) {
-        if ($event.target.composing) {
-          return;
-        }
-
-        _vm.search = $event.target.value;
-      }, _vm.onInput],
-      "focus": function ($event) {
-        $event.preventDefault();
-        return _vm.onFocus($event);
-      },
-      "blur": function ($event) {
-        $event.preventDefault();
-        return _vm.onBlur($event);
-      },
-      "keyup": function ($event) {
-        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])) {
-          return null;
-        }
-
-        $event.preventDefault();
-        return _vm.deactivate($event);
-      },
-      "keydown": [function ($event) {
-        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "tab", 9, $event.key, "Tab")) {
-          return null;
-        }
-
-        return _vm.onKeyEnter($event);
-      }, function ($event) {
-        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "down", 40, $event.key, ["Down", "ArrowDown"])) {
-          return null;
-        }
-
-        $event.preventDefault();
-        return _vm.onKeyDown($event);
-      }, function ($event) {
-        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "up", 38, $event.key, ["Up", "ArrowUp"])) {
-          return null;
-        }
-
-        $event.preventDefault();
-        return _vm.onKeyUp($event);
-      }],
-      "keypress": function ($event) {
-        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) {
-          return null;
-        }
-
-        $event.preventDefault();
-        $event.stopPropagation();
-        return _vm.onKeyEnter($event);
-      }
-    }
-  }), _vm._v(" "), _vm.canShowLoading ? _c('i', {
-    staticClass: "form-icon loading"
-  }) : _vm._e(), _vm._v(" "), _vm._t("action")], 2)]), _vm._v(" "), _vm.canShow ? _c('ul', {
-    staticClass: "menu",
-    class: this.direction,
-    style: _vm.menuStyles
-  }, _vm._l(_vm.availableItems, function (item, i) {
-    return _c('li', {
-      staticClass: "menu-item",
-      class: _vm.itemClasses(item, i),
-      on: {
-        "click": function ($event) {
-          return _vm.select(item);
-        },
-        "mouseover": function ($event) {
-          _vm.cursor = i;
-        }
-      }
-    }, [_vm._t("default", [_c('a', {
-      domProps: {
-        "innerHTML": _vm._s(_vm.highlightItem(_vm.getLabel(item)))
-      }
-    })], {
-      "item": item,
-      "search": _vm.search,
-      "highlight": _vm.highlightItem,
-      "getLabel": _vm.getLabel
-    })], 2);
-  }), 0) : _vm._e()]);
-};
-
-var __vue_staticRenderFns__ = [];
-/* style */
-
-const __vue_inject_styles__ = function (inject) {
-  if (!inject) return;
-  inject("data-v-4b48fbb1_0", {
-    source: ".form-autocomplete .menu{overflow-y:auto}.form-autocomplete .menu.top{bottom:100%;top:auto;transform:translateY(-.2rem)}.form-autocomplete .loading:not(:last-child){right:1.85rem}.form-autocomplete .menu-item a{cursor:pointer}.form-autocomplete .menu-item-active{background-color:#f1f1fc}.form-autocomplete .highlight{font-weight:700}",
-    map: undefined,
-    media: undefined
-  });
-};
-/* scoped */
-
-
-const __vue_scope_id__ = undefined;
-/* module identifier */
-
-const __vue_module_identifier__ = undefined;
-/* functional template */
-
-const __vue_is_functional_template__ = false;
-/* style inject SSR */
-
-/* style inject shadow dom */
-
-const __vue_component__ = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__,
-  staticRenderFns: __vue_staticRenderFns__
-}, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, false, createInjector, undefined, undefined);
-
-const config = {
-  locale: 'en'
-};
-function initConfig(key, value) {
-  if (!(key in config)) {
-    config[key] = value;
+  } else {
+    head.appendChild(style);
   }
 
-  return config[key];
-}
-function getConfig(key) {
-  return key in config ? config[key] : null;
-}
-function setConfig(key, value) {
-  config[key] = value;
-}
-function randomHash() {
-  return Math.random().toString(32).slice(-8);
-}
-function registerComponent(Vue, name, def) {
-  const tagName = `dx${name}`.replace(/[A-Z]/g, c => `-${c.toLowerCase()}`);
-  Vue.component(tagName, def);
-}
-function registerComponents(Vue, components = {}) {
-  for (const component in components) {
-    registerComponent(Vue, component, components[component]);
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
   }
+}
+
+var css_248z$3 = ".form-autocomplete .menu {\n  overflow-y: auto;\n}\n.form-autocomplete .menu.top {\n  bottom: 100%;\n  top: auto;\n  transform: translateY(-0.2rem);\n}\n.form-autocomplete .loading:not(:last-child) {\n  right: 1.85rem;\n}\n.form-autocomplete .menu-item a {\n  cursor: pointer;\n}\n.form-autocomplete .menu-item-active {\n  background-color: #f1f1fc;\n}\n.form-autocomplete .highlight {\n  font-weight: bold;\n}";
+styleInject(css_248z$3);
+
+script$9.render = render$9;
+
+const state = {};
+function get$1(key, defaultValue = null) {
+  return key in state ? state[key] : defaultValue;
+}
+function set(key, value) {
+  state[key] = value;
+}
+function getOrSet(key, initialValue) {
+  if (!(key in state)) {
+    state[key] = initialValue;
+  }
+
+  return state[key];
+}
+
+const configKeyPrefix = '$';
+const LOCALE_KEY = `${configKeyPrefix}locale`;
+const LOCALE_DEFAULT = 'en';
+const PREFIX_KEY = `${configKeyPrefix}prefix`;
+const PREFIX_DEFAULT = 'dx';
+const availableKeys = [LOCALE_KEY, PREFIX_KEY];
+function init(options) {
+  for (const option in options) {
+    const key = `${configKeyPrefix}${option}`;
+
+    if (availableKeys.includes(key)) {
+      set(key, options[option]);
+    }
+  }
+}
+function getLocale() {
+  return (get$1(LOCALE_KEY) || LOCALE_DEFAULT).toLowerCase();
+}
+function getPrefix() {
+  return (get$1(PREFIX_KEY) || PREFIX_DEFAULT).toLowerCase();
 }
 
 const base = {
@@ -660,15 +412,21 @@ const data = {
     months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
   }
 };
-function get(lang) {
-  lang = lang.toLowerCase();
-  return lang in data ? data[lang] : base;
+function get(key = null) {
+  const locale = getLocale();
+  const language = locale in data ? data[locale] : base;
+
+  if (key !== null) {
+    return key in language ? language[key] : null;
+  }
+
+  return language;
 }
 
-//
-var script$1 = {
+var script$8 = {
+  emits: ['update:modelValue', 'select', 'month-change'],
   props: {
-    value: {
+    modelValue: {
       type: Date
     },
     min: {
@@ -683,11 +441,11 @@ var script$1 = {
     },
     daysOfWeek: {
       type: Array,
-      default: () => get(getConfig('locale')).daysOfWeek
+      default: () => get('daysOfWeek')
     },
     months: {
       type: Array,
-      default: () => get(getConfig('locale')).months
+      default: () => get('months')
     }
   },
 
@@ -700,12 +458,12 @@ var script$1 = {
   },
 
   mounted() {
-    this.setMonth(this.value || new Date());
+    this.setMonth(this.modelValue || new Date());
     this.mount();
   },
 
   watch: {
-    value(date) {
+    modelValue(date) {
       this.setMonth(date);
       this.mount();
     },
@@ -717,7 +475,7 @@ var script$1 = {
   },
   methods: {
     reset() {
-      this.month = this.onlyDate(this.value, true, true);
+      this.month = this.onlyDate(this.modelValue, true, true);
       this.mount();
     },
 
@@ -753,7 +511,7 @@ var script$1 = {
 
     select(item) {
       const data = Object.assign({}, item);
-      this.$emit('input', data.date);
+      this.$emit('update:modelValue', data.date);
       delete data.ctrl;
       this.$emit('select', data);
     },
@@ -845,8 +603,8 @@ var script$1 = {
     },
 
     isActive(date) {
-      if (this.value) {
-        return this.onlyDate(this.value, true).getTime() === date.getTime();
+      if (this.modelValue) {
+        return this.onlyDate(this.modelValue, true).getTime() === date.getTime();
       }
 
       return false;
@@ -887,115 +645,66 @@ var script$1 = {
   }
 };
 
-/* script */
-const __vue_script__$1 = script$1;
-/* template */
-
-var __vue_render__$1 = function () {
-  var _vm = this;
-
-  var _h = _vm.$createElement;
-
-  var _c = _vm._self._c || _h;
-
-  return _c('div', {
-    staticClass: "calendar"
-  }, [_c('div', {
-    staticClass: "calendar-nav navbar"
-  }, [_c('button', {
-    staticClass: "btn btn-action btn-link",
-    attrs: {
-      "disabled": !_vm.canPrev
-    },
-    on: {
-      "click": _vm.prev
-    }
-  }, [_vm._t("prev-nav", [_c('i', {
-    staticClass: "icon icon-arrow-left"
-  })])], 2), _vm._v(" "), _c('div', {
-    staticClass: "navbar-primary"
-  }, [_vm._v(_vm._s(_vm.headerTitle))]), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-action btn-link",
-    attrs: {
-      "disabled": !_vm.canNext
-    },
-    on: {
-      "click": _vm.next
-    }
-  }, [_vm._t("next-nav", [_c('i', {
-    staticClass: "icon icon-arrow-right"
-  })])], 2)]), _vm._v(" "), _c('div', {
-    staticClass: "calendar-container"
-  }, [_c('div', {
-    staticClass: "calendar-header"
-  }, _vm._l(_vm.daysOfWeek, function (day) {
-    return _c('div', {
-      staticClass: "calendar-date"
-    }, [_vm._v(_vm._s(day))]);
-  }), 0), _vm._v(" "), _c('div', {
-    staticClass: "calendar-body"
-  }, _vm._l(_vm.days, function (day) {
-    return _c('div', {
-      staticClass: "calendar-date",
-      class: _vm.dayClasses(day)
-    }, [_c('button', {
-      staticClass: "date-item",
-      class: {
-        'date-today': day.isToday,
-        active: _vm.isActive(day.date)
-      },
-      on: {
-        "click": function ($event) {
-          return _vm.select(day);
-        }
-      }
-    }, [_vm._v("\n          " + _vm._s(day.day) + "\n        ")])]);
-  }), 0)])]);
+const _hoisted_1$5 = {
+  class: "calendar"
+};
+const _hoisted_2$3 = {
+  class: "calendar-nav navbar"
 };
 
-var __vue_staticRenderFns__$1 = [];
-/* style */
+const _hoisted_3$2 = /*#__PURE__*/createVNode("i", {
+  class: "icon icon-arrow-left"
+}, null, -1);
 
-const __vue_inject_styles__$1 = undefined;
-/* scoped */
+const _hoisted_4$1 = {
+  class: "navbar-primary"
+};
 
-const __vue_scope_id__$1 = undefined;
-/* module identifier */
+const _hoisted_5$1 = /*#__PURE__*/createVNode("i", {
+  class: "icon icon-arrow-right"
+}, null, -1);
 
-const __vue_module_identifier__$1 = undefined;
-/* functional template */
+const _hoisted_6 = {
+  class: "calendar-container"
+};
+const _hoisted_7 = {
+  class: "calendar-header"
+};
+const _hoisted_8 = {
+  class: "calendar-date"
+};
+const _hoisted_9 = {
+  class: "calendar-body"
+};
+function render$8(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock("div", _hoisted_1$5, [createVNode("div", _hoisted_2$3, [createVNode("button", {
+    class: "btn btn-action btn-link",
+    onClick: _cache[1] || (_cache[1] = (...args) => $options.prev && $options.prev(...args)),
+    disabled: !$options.canPrev
+  }, [renderSlot(_ctx.$slots, "prev-nav", {}, () => [_hoisted_3$2])], 8, ["disabled"]), createVNode("div", _hoisted_4$1, toDisplayString($options.headerTitle), 1), createVNode("button", {
+    class: "btn btn-action btn-link",
+    onClick: _cache[2] || (_cache[2] = (...args) => $options.next && $options.next(...args)),
+    disabled: !$options.canNext
+  }, [renderSlot(_ctx.$slots, "next-nav", {}, () => [_hoisted_5$1])], 8, ["disabled"])]), createVNode("div", _hoisted_6, [createVNode("div", _hoisted_7, [(openBlock(true), createBlock(Fragment, null, renderList($props.daysOfWeek, day => {
+    return openBlock(), createBlock("div", _hoisted_8, toDisplayString(day), 1);
+  }), 256))]), createVNode("div", _hoisted_9, [(openBlock(true), createBlock(Fragment, null, renderList($data.days, day => {
+    return openBlock(), createBlock("div", {
+      class: ["calendar-date", $options.dayClasses(day)]
+    }, [createVNode("button", {
+      class: ["date-item", {
+        'date-today': day.isToday,
+        active: $options.isActive(day.date)
+      }],
+      onClick: $event => $options.select(day)
+    }, toDisplayString(day.day), 11, ["onClick"])], 2);
+  }), 256))])])]);
+}
 
-const __vue_is_functional_template__$1 = false;
-/* style inject */
+script$8.render = render$8;
 
-/* style inject SSR */
-
-/* style inject shadow dom */
-
-const __vue_component__$1 = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$1,
-  staticRenderFns: __vue_staticRenderFns__$1
-}, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, false, undefined, undefined, undefined);
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var script$2 = {
+var script$7 = {
   name: 'Dropdown',
+  emits: ['select'],
   props: {
     items: {
       type: Array,
@@ -1025,7 +734,7 @@ var script$2 = {
     };
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.deactivate();
   },
 
@@ -1074,95 +783,297 @@ var script$2 = {
   }
 };
 
-/* script */
-const __vue_script__$2 = script$2;
-/* template */
-
-var __vue_render__$2 = function () {
-  var _vm = this;
-
-  var _h = _vm.$createElement;
-
-  var _c = _vm._self._c || _h;
-
-  return _c('div', {
-    staticClass: "dropdown",
-    class: _vm.classes
-  }, [_c('a', {
-    staticClass: "c-hand",
-    attrs: {
-      "tabindex": "0"
-    },
-    on: {
-      "click": _vm.toggle
-    }
-  }, [_vm._t("default")], 2), _vm._v(" "), _c('ul', {
-    directives: [{
-      name: "show",
-      rawName: "v-show",
-      value: _vm.active,
-      expression: "active"
-    }],
-    staticClass: "menu",
-    style: _vm.menuStyles,
-    on: {
-      "click": function ($event) {
-        $event.stopPropagation();
-      }
-    }
-  }, [_vm._l(_vm.items, function (item) {
-    return [item === '-' ? _c('li', {
-      staticClass: "divider"
-    }) : _c('li', {
-      staticClass: "menu-item",
-      on: {
-        "click": function ($event) {
-          return _vm.select(item);
-        }
-      }
-    }, [_vm._t("item", [_c('a', {
-      attrs: {
-        "href": "#"
-      },
-      on: {
-        "click": function ($event) {
-          $event.preventDefault();
-        }
-      }
-    }, [_vm._v(_vm._s(_vm.getLabel(item)))])], {
-      "item": item
-    })], 2)];
-  })], 2)]);
+const _hoisted_1$4 = {
+  key: 0,
+  class: "divider"
 };
+function render$7(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock("div", {
+    class: ["dropdown", $options.classes]
+  }, [createVNode("a", {
+    class: "c-hand",
+    onClick: _cache[1] || (_cache[1] = (...args) => $options.toggle && $options.toggle(...args)),
+    tabindex: "0"
+  }, [renderSlot(_ctx.$slots, "default")]), withDirectives(createVNode("ul", {
+    class: "menu",
+    style: $options.menuStyles,
+    onClick: _cache[3] || (_cache[3] = withModifiers(() => {}, ["stop"]))
+  }, [(openBlock(true), createBlock(Fragment, null, renderList($props.items, item => {
+    return openBlock(), createBlock(Fragment, null, [item === '-' ? (openBlock(), createBlock("li", _hoisted_1$4)) : (openBlock(), createBlock("li", {
+      key: 1,
+      class: "menu-item",
+      onClick: $event => $options.select(item)
+    }, [renderSlot(_ctx.$slots, "item", {
+      item: item
+    }, () => [createVNode("a", {
+      href: "#",
+      onClick: _cache[2] || (_cache[2] = withModifiers(() => {}, ["prevent"]))
+    }, toDisplayString($options.getLabel(item)), 1)])], 8, ["onClick"]))], 64);
+  }), 256))], 4), [[vShow, $data.active]])], 2);
+}
 
-var __vue_staticRenderFns__$2 = [];
-/* style */
+script$7.render = render$7;
 
-const __vue_inject_styles__$2 = undefined;
-/* scoped */
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-const __vue_scope_id__$2 = undefined;
-/* module identifier */
+function createCommonjsModule(fn) {
+  var module = { exports: {} };
+	return fn(module, module.exports), module.exports;
+}
 
-const __vue_module_identifier__$2 = undefined;
-/* functional template */
+var stringMask = createCommonjsModule(function (module, exports) {
+(function(root, factory) {
+    /* istanbul ignore next */
+    {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory();
+    }
+}(commonjsGlobal, function() {
+    var tokens = {
+        '0': {pattern: /\d/, _default: '0'},
+        '9': {pattern: /\d/, optional: true},
+        '#': {pattern: /\d/, optional: true, recursive: true},
+        'A': {pattern: /[a-zA-Z0-9]/},
+        'S': {pattern: /[a-zA-Z]/},
+        'U': {pattern: /[a-zA-Z]/, transform: function(c) { return c.toLocaleUpperCase(); }},
+        'L': {pattern: /[a-zA-Z]/, transform: function(c) { return c.toLocaleLowerCase(); }},
+        '$': {escape: true}
+    };
 
-const __vue_is_functional_template__$2 = false;
-/* style inject */
+    function isEscaped(pattern, pos) {
+        var count = 0;
+        var i = pos - 1;
+        var token = {escape: true};
+        while (i >= 0 && token && token.escape) {
+            token = tokens[pattern.charAt(i)];
+            count += token && token.escape ? 1 : 0;
+            i--;
+        }
+        return count > 0 && count % 2 === 1;
+    }
 
-/* style inject SSR */
+    function calcOptionalNumbersToUse(pattern, value) {
+        var numbersInP = pattern.replace(/[^0]/g,'').length;
+        var numbersInV = value.replace(/[^\d]/g,'').length;
+        return numbersInV - numbersInP;
+    }
 
-/* style inject shadow dom */
+    function concatChar(text, character, options, token) {
+        if (token && typeof token.transform === 'function') {
+            character = token.transform(character);
+        }
+        if (options.reverse) {
+            return character + text;
+        }
+        return text + character;
+    }
 
-const __vue_component__$2 = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$2,
-  staticRenderFns: __vue_staticRenderFns__$2
-}, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, false, undefined, undefined, undefined);
+    function hasMoreTokens(pattern, pos, inc) {
+        var pc = pattern.charAt(pos);
+        var token = tokens[pc];
+        if (pc === '') {
+            return false;
+        }
+        return token && !token.escape ? true : hasMoreTokens(pattern, pos + inc, inc);
+    }
 
-//
-var script$3 = {
+    function hasMoreRecursiveTokens(pattern, pos, inc) {
+        var pc = pattern.charAt(pos);
+        var token = tokens[pc];
+        if (pc === '') {
+            return false;
+        }
+        return token && token.recursive ? true : hasMoreRecursiveTokens(pattern, pos + inc, inc);
+    }
+
+    function insertChar(text, char, position) {
+        var t = text.split('');
+        t.splice(position, 0, char);
+        return t.join('');
+    }
+
+    function StringMask(pattern, opt) {
+        this.options = opt || {};
+        this.options = {
+            reverse: this.options.reverse || false,
+            usedefaults: this.options.usedefaults || this.options.reverse
+        };
+        this.pattern = pattern;
+    }
+
+    StringMask.prototype.process = function proccess(value) {
+        if (!value) {
+            return {result: '', valid: false};
+        }
+        value = value + '';
+        var pattern2 = this.pattern;
+        var valid = true;
+        var formatted = '';
+        var valuePos = this.options.reverse ? value.length - 1 : 0;
+        var patternPos = 0;
+        var optionalNumbersToUse = calcOptionalNumbersToUse(pattern2, value);
+        var escapeNext = false;
+        var recursive = [];
+        var inRecursiveMode = false;
+
+        var steps = {
+            start: this.options.reverse ? pattern2.length - 1 : 0,
+            end: this.options.reverse ? -1 : pattern2.length,
+            inc: this.options.reverse ? -1 : 1
+        };
+
+        function continueCondition(options) {
+            if (!inRecursiveMode && !recursive.length && hasMoreTokens(pattern2, patternPos, steps.inc)) {
+                // continue in the normal iteration
+                return true;
+            } else if (!inRecursiveMode && recursive.length &&
+                hasMoreRecursiveTokens(pattern2, patternPos, steps.inc)) {
+                // continue looking for the recursive tokens
+                // Note: all chars in the patterns after the recursive portion will be handled as static string
+                return true;
+            } else if (!inRecursiveMode) {
+                // start to handle the recursive portion of the pattern
+                inRecursiveMode = recursive.length > 0;
+            }
+
+            if (inRecursiveMode) {
+                var pc = recursive.shift();
+                recursive.push(pc);
+                if (options.reverse && valuePos >= 0) {
+                    patternPos++;
+                    pattern2 = insertChar(pattern2, pc, patternPos);
+                    return true;
+                } else if (!options.reverse && valuePos < value.length) {
+                    pattern2 = insertChar(pattern2, pc, patternPos);
+                    return true;
+                }
+            }
+            return patternPos < pattern2.length && patternPos >= 0;
+        }
+
+        /**
+         * Iterate over the pattern's chars parsing/matching the input value chars
+         * until the end of the pattern. If the pattern ends with recursive chars
+         * the iteration will continue until the end of the input value.
+         *
+         * Note: The iteration must stop if an invalid char is found.
+         */
+        for (patternPos = steps.start; continueCondition(this.options); patternPos = patternPos + steps.inc) {
+            // Value char
+            var vc = value.charAt(valuePos);
+            // Pattern char to match with the value char
+            var pc = pattern2.charAt(patternPos);
+
+            var token = tokens[pc];
+            if (recursive.length && token && !token.recursive) {
+                // In the recursive portion of the pattern: tokens not recursive must be seen as static chars
+                token = null;
+            }
+
+            // 1. Handle escape tokens in pattern
+            // go to next iteration: if the pattern char is a escape char or was escaped
+            if (!inRecursiveMode || vc) {
+                if (this.options.reverse && isEscaped(pattern2, patternPos)) {
+                    // pattern char is escaped, just add it and move on
+                    formatted = concatChar(formatted, pc, this.options, token);
+                    // skip escape token
+                    patternPos = patternPos + steps.inc;
+                    continue;
+                } else if (!this.options.reverse && escapeNext) {
+                    // pattern char is escaped, just add it and move on
+                    formatted = concatChar(formatted, pc, this.options, token);
+                    escapeNext = false;
+                    continue;
+                } else if (!this.options.reverse && token && token.escape) {
+                    // mark to escape the next pattern char
+                    escapeNext = true;
+                    continue;
+                }
+            }
+
+            // 2. Handle recursive tokens in pattern
+            // go to next iteration: if the value str is finished or
+            //                       if there is a normal token in the recursive portion of the pattern
+            if (!inRecursiveMode && token && token.recursive) {
+                // save it to repeat in the end of the pattern and handle the value char now
+                recursive.push(pc);
+            } else if (inRecursiveMode && !vc) {
+                // in recursive mode but value is finished. Add the pattern char if it is not a recursive token
+                formatted = concatChar(formatted, pc, this.options, token);
+                continue;
+            } else if (!inRecursiveMode && recursive.length > 0 && !vc) {
+                // recursiveMode not started but already in the recursive portion of the pattern
+                continue;
+            }
+
+            // 3. Handle the value
+            // break iterations: if value is invalid for the given pattern
+            if (!token) {
+                // add char of the pattern
+                formatted = concatChar(formatted, pc, this.options, token);
+                if (!inRecursiveMode && recursive.length) {
+                    // save it to repeat in the end of the pattern
+                    recursive.push(pc);
+                }
+            } else if (token.optional) {
+                // if token is optional, only add the value char if it matchs the token pattern
+                //                       if not, move on to the next pattern char
+                if (token.pattern.test(vc) && optionalNumbersToUse) {
+                    formatted = concatChar(formatted, vc, this.options, token);
+                    valuePos = valuePos + steps.inc;
+                    optionalNumbersToUse--;
+                } else if (recursive.length > 0 && vc) {
+                    valid = false;
+                    break;
+                }
+            } else if (token.pattern.test(vc)) {
+                // if token isn't optional the value char must match the token pattern
+                formatted = concatChar(formatted, vc, this.options, token);
+                valuePos = valuePos + steps.inc;
+            } else if (!vc && token._default && this.options.usedefaults) {
+                // if the token isn't optional and has a default value, use it if the value is finished
+                formatted = concatChar(formatted, token._default, this.options, token);
+            } else {
+                // the string value don't match the given pattern
+                valid = false;
+                break;
+            }
+        }
+
+        return {result: formatted, valid: valid};
+    };
+
+    StringMask.prototype.apply = function(value) {
+        return this.process(value).result;
+    };
+
+    StringMask.prototype.validate = function(value) {
+        return this.process(value).valid;
+    };
+
+    StringMask.process = function(value, pattern, options) {
+        return new StringMask(pattern, options).process(value);
+    };
+
+    StringMask.apply = function(value, pattern, options) {
+        return new StringMask(pattern, options).apply(value);
+    };
+
+    StringMask.validate = function(value, pattern, options) {
+        return new StringMask(pattern, options).validate(value);
+    };
+
+    return StringMask;
+}));
+});
+
+var script$6 = {
+  inheritAttrs: false,
+  emits: ['update:modelValue'],
   props: {
-    value: {
+    modelValue: {
       type: String
     }
   },
@@ -1185,7 +1096,7 @@ var script$3 = {
   },
 
   created() {
-    this.display = this.mask(this.value, true);
+    this.display = this.mask(this.modelValue, true);
   },
 
   methods: {
@@ -1201,7 +1112,7 @@ var script$3 = {
 
       if (outValue !== this.lastValue) {
         this.lastValue = outValue;
-        this.$emit('input', outValue);
+        this.$emit('update:modelValue', outValue);
       }
     },
 
@@ -1217,7 +1128,7 @@ var script$3 = {
       }
 
       const maskValue = value.replace(/\D/g, '');
-      return StringMask.apply(maskValue, this.pattern).replace(/[^0-9]$/, '');
+      return stringMask.apply(maskValue, this.pattern).replace(/[^0-9]$/, '');
     },
 
     formatOutput(value) {
@@ -1230,67 +1141,33 @@ var script$3 = {
       return '00/00/0000';
     },
 
-    inputListeners() {
-      return { ...this.$listeners,
-        input: this.onInput
+    inputAttrs() {
+      return { ...this.$attrs,
+        onInput: this.onInput
       };
     }
 
   }
 };
 
-/* script */
-const __vue_script__$3 = script$3;
-/* template */
+function render$6(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock("input", mergeProps({
+    type: "text",
+    class: "form-input"
+  }, $options.inputAttrs, {
+    value: $data.display,
+    placeholder: $options.pattern,
+    ref: "input"
+  }), null, 16, ["value", "placeholder"]);
+}
 
-var __vue_render__$3 = function () {
-  var _vm = this;
+script$6.render = render$6;
 
-  var _h = _vm.$createElement;
-
-  var _c = _vm._self._c || _h;
-
-  return _c('input', _vm._g({
-    ref: "input",
-    staticClass: "form-input",
-    attrs: {
-      "type": "text",
-      "placeholder": _vm.pattern
-    },
-    domProps: {
-      "value": _vm.display
-    }
-  }, _vm.inputListeners));
-};
-
-var __vue_staticRenderFns__$3 = [];
-/* style */
-
-const __vue_inject_styles__$3 = undefined;
-/* scoped */
-
-const __vue_scope_id__$3 = undefined;
-/* module identifier */
-
-const __vue_module_identifier__$3 = undefined;
-/* functional template */
-
-const __vue_is_functional_template__$3 = false;
-/* style inject */
-
-/* style inject SSR */
-
-/* style inject shadow dom */
-
-const __vue_component__$3 = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$3,
-  staticRenderFns: __vue_staticRenderFns__$3
-}, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, false, undefined, undefined, undefined);
-
-//
-var script$4 = {
+var script$5 = {
+  inheritAttrs: false,
+  emits: ['update:modelValue'],
   props: {
-    value: {
+    modelValue: {
       type: [Number, String]
     },
     precision: {
@@ -1317,7 +1194,7 @@ var script$4 = {
   },
 
   created() {
-    this.display = this.mask(this.value);
+    this.display = this.mask(this.modelValue);
   },
 
   methods: {
@@ -1333,7 +1210,7 @@ var script$4 = {
 
       if (numberValue !== this.lastValue) {
         this.lastValue = numberValue;
-        this.$emit('input', numberValue);
+        this.$emit('update:modelValue', numberValue);
       }
     },
 
@@ -1347,7 +1224,7 @@ var script$4 = {
       }
 
       const maskValue = Number(value.replace(/\D/g, '')).toString();
-      return StringMask.apply(maskValue, this.pattern, {
+      return stringMask.apply(maskValue, this.pattern, {
         reverse: true
       });
     },
@@ -1366,67 +1243,74 @@ var script$4 = {
       return this.precision > 0 ? `0,${'0'.repeat(this.precision)}` : '0';
     },
 
-    inputListeners() {
-      return { ...this.$listeners,
-        input: this.onInput
+    inputAttrs() {
+      return { ...this.$attrs,
+        onInput: this.onInput
       };
     }
 
   }
 };
 
-/* script */
-const __vue_script__$4 = script$4;
-/* template */
+function render$5(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock("input", mergeProps({
+    type: "text",
+    class: "form-input text-right"
+  }, $options.inputAttrs, {
+    value: $data.display,
+    placeholder: $options.placeholder,
+    ref: "input"
+  }), null, 16, ["value", "placeholder"]);
+}
 
-var __vue_render__$4 = function () {
-  var _vm = this;
+script$5.render = render$5;
 
-  var _h = _vm.$createElement;
+function randomHash() {
+  return Math.random().toString(32).slice(-8);
+}
+function mount(component, args = {}) {
+  const {
+    props,
+    children,
+    element,
+    app
+  } = args;
+  let el = element;
+  let vNode = createVNode(component, props, children);
 
-  var _c = _vm._self._c || _h;
+  if (app && app._context) {
+    vNode.appContext = app._context;
+  }
 
-  return _c('input', _vm._g({
-    ref: "input",
-    staticClass: "form-input text-right",
-    attrs: {
-      "type": "text",
-      "placeholder": _vm.placeholder
-    },
-    domProps: {
-      "value": _vm.display
+  if (!el && typeof document !== 'undefined') {
+    el = document.createElement('div');
+  }
+
+  if (el) {
+    render$a(vNode, el);
+  }
+
+  const destroy = () => {
+    if (el) {
+      render$a(null, el);
     }
-  }, _vm.inputListeners));
-};
 
-var __vue_staticRenderFns__$4 = [];
-/* style */
+    el = null;
+    vNode = null;
+  };
 
-const __vue_inject_styles__$4 = undefined;
-/* scoped */
+  return {
+    vNode,
+    destroy,
+    el
+  };
+}
 
-const __vue_scope_id__$4 = undefined;
-/* module identifier */
-
-const __vue_module_identifier__$4 = undefined;
-/* functional template */
-
-const __vue_is_functional_template__$4 = false;
-/* style inject */
-
-/* style inject SSR */
-
-/* style inject shadow dom */
-
-const __vue_component__$4 = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$4,
-  staticRenderFns: __vue_staticRenderFns__$4
-}, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, undefined, undefined, undefined);
-
-//
-var script$5 = {
+var script$4 = {
+  inheritAttrs: false,
+  emits: ['update:modelValue'],
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       default: false
     },
@@ -1450,27 +1334,39 @@ var script$5 = {
   data() {
     return {
       hash: randomHash(),
-      activeModals: initConfig('activeModals', [])
+      activeModals: getOrSet('activeModals', [])
     };
   },
 
   mounted() {
-    this.$nextTick(() => {
-      document.body.appendChild(this.$el);
-
-      if (this.value) {
-        this.activate();
-      }
-    });
-  },
-
-  destroyed() {
-    this.$el.remove();
+    if (this.modelValue) {
+      this.activate();
+    }
   },
 
   watch: {
-    value(value) {
+    modelValue(value) {
       value ? this.activate() : this.deactivate();
+    }
+
+  },
+  computed: {
+    hasHeader() {
+      return this.closable || this.title || 'header' in this.$slots;
+    },
+
+    hasFooter() {
+      return 'footer' in this.$slots;
+    },
+
+    classes() {
+      const classes = [];
+
+      if (this.size !== null) {
+        classes.push(`modal-${this.size}`);
+      }
+
+      return classes;
     }
 
   },
@@ -1496,7 +1392,7 @@ var script$5 = {
     },
 
     closeListener(e) {
-      if (this.value && e.keyCode === 27 && this.activeModals[this.activeModals.length - 1] === this.hash) {
+      if (this.modelValue && e.keyCode === 27 && this.activeModals[this.activeModals.length - 1] === this.hash) {
         this.close();
       }
     },
@@ -1509,116 +1405,59 @@ var script$5 = {
 
     close() {
       if (this.closable) {
-        this.$emit('input', false);
+        this.$emit('update:modelValue', false);
       }
-    }
-
-  },
-  computed: {
-    classes() {
-      const classes = [];
-
-      if (this.size !== null) {
-        classes.push(`modal-${this.size}`);
-      }
-
-      return classes;
     }
 
   }
 };
 
-/* script */
-const __vue_script__$5 = script$5;
-/* template */
-
-var __vue_render__$5 = function () {
-  var _vm = this;
-
-  var _h = _vm.$createElement;
-
-  var _c = _vm._self._c || _h;
-
-  return _c('div', [_c('transition', {
-    attrs: {
-      "name": "modal"
-    }
-  }, [_vm.value ? _c('div', {
-    staticClass: "modal active",
-    class: _vm.classes
-  }, [_c('div', {
-    staticClass: "modal-overlay",
-    on: {
-      "click": _vm.overlayClick
-    }
-  }), _vm._v(" "), _c('div', {
-    staticClass: "modal-container"
-  }, [_c('div', {
-    staticClass: "modal-header"
-  }, [_vm.closable ? _c('button', {
-    staticClass: "btn btn-clear float-right",
-    on: {
-      "click": _vm.close
-    }
-  }) : _vm._e(), _vm._v(" "), _vm._t("header", [_vm.title ? _c('div', {
-    staticClass: "modal-title"
-  }, [_vm._v(_vm._s(_vm.title))]) : _vm._e()])], 2), _vm._v(" "), _c('div', {
-    staticClass: "modal-body"
-  }, [_vm._t("default")], 2), _vm._v(" "), _c('div', {
-    staticClass: "modal-footer"
-  }, [_vm._t("footer")], 2)])]) : _vm._e()])], 1);
+const _hoisted_1$3 = {
+  class: "modal-container"
 };
-
-var __vue_staticRenderFns__$5 = [];
-/* style */
-
-const __vue_inject_styles__$5 = function (inject) {
-  if (!inject) return;
-  inject("data-v-dd7be90a_0", {
-    source: ".modal.active.modal-enter-active{transition:all .15s}.modal.active.modal-leave-active{transition:all .3s}.modal.active.modal-enter,.modal.active.modal-leave-to{opacity:0}",
-    map: undefined,
-    media: undefined
-  });
+const _hoisted_2$2 = {
+  key: 0,
+  class: "modal-header"
 };
-/* scoped */
+const _hoisted_3$1 = {
+  key: 0,
+  class: "modal-title"
+};
+const _hoisted_4 = {
+  class: "modal-body"
+};
+const _hoisted_5 = {
+  key: 1,
+  class: "modal-footer"
+};
+function render$4(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock(Teleport, {
+    to: "body"
+  }, [createVNode(Transition, {
+    name: "modal"
+  }, {
+    default: withCtx(() => [$props.modelValue ? (openBlock(), createBlock("div", mergeProps({
+      key: 0,
+      class: ["modal active", $options.classes]
+    }, _ctx.$attrs), [createVNode("div", {
+      class: "modal-overlay",
+      onClick: _cache[1] || (_cache[1] = (...args) => $options.overlayClick && $options.overlayClick(...args))
+    }), createVNode("div", _hoisted_1$3, [$options.hasHeader ? (openBlock(), createBlock("div", _hoisted_2$2, [$props.closable ? (openBlock(), createBlock("button", {
+      key: 0,
+      class: "btn btn-clear float-right",
+      onClick: _cache[2] || (_cache[2] = (...args) => $options.close && $options.close(...args))
+    })) : createCommentVNode("", true), renderSlot(_ctx.$slots, "header", {}, () => [$props.title ? (openBlock(), createBlock("div", _hoisted_3$1, toDisplayString($props.title), 1)) : createCommentVNode("", true)])])) : createCommentVNode("", true), createVNode("div", _hoisted_4, [renderSlot(_ctx.$slots, "default")]), $options.hasFooter ? (openBlock(), createBlock("div", _hoisted_5, [renderSlot(_ctx.$slots, "footer")])) : createCommentVNode("", true)])], 16)) : createCommentVNode("", true)]),
+    _: 3
+  })]);
+}
 
+var css_248z$2 = ".modal.active.modal-enter-active {\n  transition: all 0.15s;\n}\n.modal.active.modal-leave-active {\n  transition: all 0.3s;\n}\n.modal.active.modal-enter, .modal.active.modal-leave-to {\n  opacity: 0;\n}";
+styleInject(css_248z$2);
 
-const __vue_scope_id__$5 = undefined;
-/* module identifier */
+script$4.render = render$4;
 
-const __vue_module_identifier__$5 = undefined;
-/* functional template */
-
-const __vue_is_functional_template__$5 = false;
-/* style inject SSR */
-
-/* style inject shadow dom */
-
-const __vue_component__$5 = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$5,
-  staticRenderFns: __vue_staticRenderFns__$5
-}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, createInjector, undefined, undefined);
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var script$6 = {
+var script$3 = {
+  emits: ['paginate'],
   props: {
     total: Number,
     limit: {
@@ -1697,105 +1536,41 @@ var script$6 = {
   }
 };
 
-/* script */
-const __vue_script__$6 = script$6;
-/* template */
-
-var __vue_render__$6 = function () {
-  var _vm = this;
-
-  var _h = _vm.$createElement;
-
-  var _c = _vm._self._c || _h;
-
-  return _vm.totalPages > 1 ? _c('ul', {
-    staticClass: "pagination"
-  }, [_c('li', {
-    staticClass: "page-item",
-    class: {
-      disabled: _vm.currentPage <= 1
-    }
-  }, [_c('a', {
-    attrs: {
-      "href": "#"
-    },
-    on: {
-      "click": function ($event) {
-        $event.preventDefault();
-        return _vm.paginate(_vm.currentPage - 1);
-      }
-    }
-  }, [_vm._v("Voltar")])]), _vm._v(" "), _vm._l(_vm.pageNumbers, function (page) {
-    return _c('li', {
-      staticClass: "page-item",
-      class: {
-        active: _vm.currentPage === page
-      }
-    }, [_c('a', {
-      attrs: {
-        "href": "#"
-      },
-      on: {
-        "click": function ($event) {
-          $event.preventDefault();
-          return _vm.paginate(page);
-        }
-      }
-    }, [_vm._v(_vm._s(page))])]);
-  }), _vm._v(" "), _c('li', {
-    staticClass: "page-item",
-    class: {
-      disabled: _vm.currentPage === _vm.totalPages
-    }
-  }, [_c('a', {
-    attrs: {
-      "href": "#"
-    },
-    on: {
-      "click": function ($event) {
-        $event.preventDefault();
-        return _vm.paginate(_vm.currentPage + 1);
-      }
-    }
-  }, [_vm._v("Avançar")])])], 2) : _vm._e();
+const _hoisted_1$2 = {
+  key: 0,
+  class: "pagination"
 };
+function render$3(_ctx, _cache, $props, $setup, $data, $options) {
+  return $options.totalPages > 1 ? (openBlock(), createBlock("ul", _hoisted_1$2, [createVNode("li", {
+    class: ["page-item", {
+      disabled: $data.currentPage <= 1
+    }]
+  }, [createVNode("a", {
+    href: "#",
+    onClick: _cache[1] || (_cache[1] = withModifiers($event => $options.paginate($data.currentPage - 1), ["prevent"]))
+  }, "Voltar")], 2), (openBlock(true), createBlock(Fragment, null, renderList($options.pageNumbers, page => {
+    return openBlock(), createBlock("li", {
+      class: ["page-item", {
+        active: $data.currentPage === page
+      }]
+    }, [createVNode("a", {
+      href: "#",
+      onClick: withModifiers($event => $options.paginate(page), ["prevent"])
+    }, toDisplayString(page), 9, ["onClick"])], 2);
+  }), 256)), createVNode("li", {
+    class: ["page-item", {
+      disabled: $data.currentPage === $options.totalPages
+    }]
+  }, [createVNode("a", {
+    href: "#",
+    onClick: _cache[2] || (_cache[2] = withModifiers($event => $options.paginate($data.currentPage + 1), ["prevent"]))
+  }, "Avançar")], 2)])) : createCommentVNode("", true);
+}
 
-var __vue_staticRenderFns__$6 = [];
-/* style */
+script$3.render = render$3;
 
-const __vue_inject_styles__$6 = undefined;
-/* scoped */
-
-const __vue_scope_id__$6 = undefined;
-/* module identifier */
-
-const __vue_module_identifier__$6 = undefined;
-/* functional template */
-
-const __vue_is_functional_template__$6 = false;
-/* style inject */
-
-/* style inject SSR */
-
-/* style inject shadow dom */
-
-const __vue_component__$6 = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$6,
-  staticRenderFns: __vue_staticRenderFns__$6
-}, __vue_inject_styles__$6, __vue_script__$6, __vue_scope_id__$6, __vue_is_functional_template__$6, __vue_module_identifier__$6, false, undefined, undefined, undefined);
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var script$7 = {
+var script$2 = {
+  emits: ['change'],
   props: {
     block: {
       type: Boolean,
@@ -1806,129 +1581,93 @@ var script$7 = {
   data() {
     return {
       tabs: [],
-      activeTabHash: ''
+      activeTabId: undefined
     };
-  },
-
-  created() {
-    this.tabs = this.$children;
   },
 
   mounted() {
     if (this.tabs.length) {
-      this.selectTab(this.tabs[0].hash);
+      this.selectTab(this.tabs[0].id);
     }
   },
 
   methods: {
-    findTab(hash) {
-      return this.tabs.find(tab => tab.hash === hash);
+    findTab(id) {
+      return this.tabs.find(tab => tab.id === id);
     },
 
-    selectTab(selectedTabHash) {
-      const selectedTab = this.findTab(selectedTabHash);
+    selectTab(selectedTabId) {
+      const selectedTab = this.findTab(selectedTabId);
 
-      if (!selectedTab) {
+      if (!selectedTab || selectedTab.disabled) {
         return;
       }
 
       this.tabs.forEach(tab => {
-        tab.isActive = tab.hash === selectedTab.hash;
+        tab.isActive = tab.id === selectedTab.id;
       });
-      this.$emit('change', {
-        tab: selectedTab
-      });
-      this.activeTabHash = selectedTab.hash;
+
+      if (this.activeTabId !== undefined) {
+        this.$emit('change', {
+          id: this.activeTabId
+        });
+      }
+
+      this.activeTabId = selectedTab.id;
     },
 
     activeTab() {
-      return this.activeTabHash;
+      return this.activeTabId;
     }
 
   }
 };
 
-/* script */
-const __vue_script__$7 = script$7;
-/* template */
-
-var __vue_render__$7 = function () {
-  var _vm = this;
-
-  var _h = _vm.$createElement;
-
-  var _c = _vm._self._c || _h;
-
-  return _c('div', {
-    staticClass: "tabs-container"
-  }, [_c('ul', {
-    staticClass: "tab",
-    class: {
+const _hoisted_1$1 = {
+  class: "tabs-container"
+};
+const _hoisted_2$1 = {
+  key: 0,
+  class: "tab-item tab-action"
+};
+function render$2(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock("div", _hoisted_1$1, [createVNode("ul", {
+    class: ["tab", {
       'tab-block': this.block
-    }
-  }, _vm._l(_vm.tabs, function (tab) {
-    return _c('li', {
-      staticClass: "tab-item",
-      class: {
+    }]
+  }, [(openBlock(true), createBlock(Fragment, null, renderList($data.tabs, tab => {
+    return openBlock(), createBlock("li", {
+      class: ["tab-item", {
         active: tab.isActive
+      }]
+    }, [createVNode("a", {
+      href: "#",
+      onClick: withModifiers($event => $options.selectTab(tab.id), ["prevent"]),
+      class: {
+        'disabled': tab.disabled
       }
-    }, [_c('a', {
-      attrs: {
-        "href": "#"
-      },
-      on: {
-        "click": function ($event) {
-          $event.preventDefault();
-          return _vm.selectTab(tab.hash);
-        }
-      }
-    }, [_vm._v(_vm._s(tab.name))])]);
-  }), 0), _vm._v(" "), _vm._t("default")], 2);
-};
+    }, toDisplayString(tab.label), 11, ["onClick"])], 2);
+  }), 256)), 'action' in _ctx.$slots ? (openBlock(), createBlock("li", _hoisted_2$1, [renderSlot(_ctx.$slots, "action")])) : createCommentVNode("", true)], 2), renderSlot(_ctx.$slots, "default")]);
+}
 
-var __vue_staticRenderFns__$7 = [];
-/* style */
+var css_248z$1 = ".tab .tab-item a.disabled {\n  cursor: default;\n  opacity: 0.5;\n  pointer-events: none;\n}\n.tab .tab-item a:focus {\n  box-shadow: none;\n}";
+styleInject(css_248z$1);
 
-const __vue_inject_styles__$7 = function (inject) {
-  if (!inject) return;
-  inject("data-v-97753820_0", {
-    source: ".tab .tab-item a:focus{box-shadow:none}",
-    map: undefined,
-    media: undefined
-  });
-};
-/* scoped */
+script$2.render = render$2;
 
-
-const __vue_scope_id__$7 = undefined;
-/* module identifier */
-
-const __vue_module_identifier__$7 = undefined;
-/* functional template */
-
-const __vue_is_functional_template__$7 = false;
-/* style inject SSR */
-
-/* style inject shadow dom */
-
-const __vue_component__$7 = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$7,
-  staticRenderFns: __vue_staticRenderFns__$7
-}, __vue_inject_styles__$7, __vue_script__$7, __vue_scope_id__$7, __vue_is_functional_template__$7, __vue_module_identifier__$7, false, createInjector, undefined, undefined);
-
-//
-//
-//
-//
-//
-//
-var script$8 = {
+var script$1 = {
   props: {
     id: {
-      default: null
+      type: String,
+      default: randomHash
     },
-    name: {
+    label: {
+      type: String,
       required: true
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -1938,115 +1677,216 @@ var script$8 = {
     };
   },
 
+  created() {
+    this.$parent.tabs.push(this);
+  }
+
+};
+
+function render$1(_ctx, _cache, $props, $setup, $data, $options) {
+  return !$props.disabled ? withDirectives((openBlock(), createBlock("section", {
+    key: 0,
+    class: "tab-panel",
+    "aria-hidden": !$data.isActive,
+    id: `tab-${$props.id}`,
+    role: "tabpanel"
+  }, [renderSlot(_ctx.$slots, "default")], 8, ["aria-hidden", "id"])), [[vShow, $data.isActive]]) : createCommentVNode("", true);
+}
+
+script$1.render = render$1;
+
+var script = {
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    },
+    type: {
+      type: String,
+      default: ''
+    },
+    content: {
+      type: [String, Object],
+      default: ''
+    }
+  },
+
+  data() {
+    return {
+      visible: this.show
+    };
+  },
+
+  watch: {
+    show() {
+      this.visible = this.show;
+    }
+
+  },
   computed: {
-    hash() {
-      if (this.id) {
-        return this.id;
-      } else {
-        return this.name.toLowerCase().replace(/ /g, '-');
-      }
+    parsedContent() {
+      const content = typeof this.content === 'string' ? {
+        message: this.content
+      } : this.content;
+      return {
+        title: '',
+        message: '',
+        ...content
+      };
+    },
+
+    title() {
+      return this.parsedContent.title;
+    },
+
+    message() {
+      return this.parsedContent.message;
     }
 
   }
 };
 
-/* script */
-const __vue_script__$8 = script$8;
-/* template */
-
-var __vue_render__$8 = function () {
-  var _vm = this;
-
-  var _h = _vm.$createElement;
-
-  var _c = _vm._self._c || _h;
-
-  return _c('section', {
-    directives: [{
-      name: "show",
-      rawName: "v-show",
-      value: _vm.isActive,
-      expression: "isActive"
-    }],
-    staticClass: "tab-panel",
-    attrs: {
-      "aria-hidden": !_vm.isActive,
-      "id": _vm.hash,
-      "role": "tabpanel"
-    }
-  }, [_vm._t("default")], 2);
+const _hoisted_1 = {
+  key: 0,
+  class: "toast-wrapper"
 };
+const _hoisted_2 = {
+  key: 0,
+  class: "toast-title"
+};
+const _hoisted_3 = {
+  class: "toast-message"
+};
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock(Teleport, {
+    to: "body"
+  }, [$data.visible ? (openBlock(), createBlock("div", _hoisted_1, [createVNode("div", {
+    class: ["toast", $props.type ? `toast-${$props.type}` : '']
+  }, [createVNode("button", {
+    class: "btn btn-clear float-right",
+    onClick: _cache[1] || (_cache[1] = $event => $data.visible = false)
+  }), $options.title ? (openBlock(), createBlock("h6", _hoisted_2, toDisplayString($options.title), 1)) : createCommentVNode("", true), createVNode("p", _hoisted_3, toDisplayString($options.message), 1)], 2)])) : createCommentVNode("", true)]);
+}
 
-var __vue_staticRenderFns__$8 = [];
-/* style */
+var css_248z = ".toast-wrapper {\n  left: 50%;\n  min-width: 10rem;\n  position: absolute;\n  top: 0.5rem;\n  transform: translateX(-50%);\n  z-index: 410;\n}";
+styleInject(css_248z);
 
-const __vue_inject_styles__$8 = undefined;
-/* scoped */
-
-const __vue_scope_id__$8 = undefined;
-/* module identifier */
-
-const __vue_module_identifier__$8 = undefined;
-/* functional template */
-
-const __vue_is_functional_template__$8 = false;
-/* style inject */
-
-/* style inject SSR */
-
-/* style inject shadow dom */
-
-const __vue_component__$8 = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$8,
-  staticRenderFns: __vue_staticRenderFns__$8
-}, __vue_inject_styles__$8, __vue_script__$8, __vue_scope_id__$8, __vue_is_functional_template__$8, __vue_module_identifier__$8, false, undefined, undefined, undefined);
-
-
+script.render = render;
 
 var components = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  Autocomplete: __vue_component__,
-  Calendar: __vue_component__$1,
-  Dropdown: __vue_component__$2,
-  InputNumber: __vue_component__$4,
-  InputDate: __vue_component__$3,
-  Modal: __vue_component__$5,
-  Pagination: __vue_component__$6,
-  Tabs: __vue_component__$7,
-  Tab: __vue_component__$8
+  Autocomplete: script$9,
+  Calendar: script$8,
+  Dropdown: script$7,
+  InputNumber: script$5,
+  InputDate: script$6,
+  Modal: script$4,
+  Pagination: script$3,
+  Tabs: script$2,
+  Tab: script$1,
+  Toast: script
 });
 
-function install(Vue, params = {}) {
-  params = { ...params
-  };
-  if (install.installed) return;
-  install.installed = true;
-  registerComponents(Vue, components);
+let appInstance;
+let toast;
+let timeout;
 
-  if ('locale' in params) {
-    setConfig('locale', params.locale);
+function close() {
+  if (!!toast) {
+    toast.destroy();
   }
-} // Create module definition for Vue.use()
 
-
-const plugin = {
-  install
-}; // To auto-install when vue is found
-// eslint-disable-next-line no-redeclare
-
-/* global window, global */
-
-let GlobalVue = null;
-
-if (typeof window !== 'undefined') {
-  GlobalVue = window.Vue;
-} else if (typeof global !== 'undefined') {
-  GlobalVue = global.Vue;
+  clearTimeout(timeout);
 }
 
-if (GlobalVue) {
-  GlobalVue.use(plugin);
-} // Default export is library as a whole, registered via Vue.use()
+function show(content, options = {}) {
+  options = {
+    type: null,
+    timeout: 5,
+    // seconds
+    ...options
+  };
+  close();
+  toast = mount(script, {
+    props: {
+      show: true,
+      content: content,
+      type: options.type
+    },
+    app: appInstance
+  });
 
-export default plugin;
-export { __vue_component__ as Autocomplete, __vue_component__$1 as Calendar, __vue_component__$2 as Dropdown, __vue_component__$3 as InputDate, __vue_component__$4 as InputNumber, __vue_component__$5 as Modal, __vue_component__$6 as Pagination, __vue_component__$8 as Tab, __vue_component__$7 as Tabs };
+  if (options.timeout) {
+    clearTimeout(timeout);
+    timeout = setTimeout(close, options.timeout * 1000);
+  }
+}
+
+function primary(content, options = {}) {
+  return show(content, { ...options,
+    type: 'primary'
+  });
+}
+
+function success(content, options = {}) {
+  return show(content, { ...options,
+    type: 'success'
+  });
+}
+
+function warning(content, options = {}) {
+  return show(content, { ...options,
+    type: 'warning'
+  });
+}
+
+function error(content, options = {}) {
+  return show(content, { ...options,
+    type: 'error'
+  });
+}
+
+function info(content, options = {}) {
+  return show(content, { ...options,
+    type: 'info'
+  });
+}
+
+function setup(app) {
+  appInstance = app;
+  app.config.globalProperties.$toast = {
+    show,
+    primary,
+    success,
+    warning,
+    error,
+    info,
+    close
+  };
+}
+
+var plugins = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  toast: setup
+});
+
+// Import vue components
+
+const install = function installPlugin(app, options = {}) {
+  init(options); // Register components
+
+  const prefix = getPrefix();
+
+  for (const component in components) {
+    const tagName = `${prefix}${component}`.replace(/[A-Z]/g, c => `-${c.toLowerCase()}`);
+    app.component(tagName, components[component]);
+  } // Register plugins
+
+
+  for (const plugin in plugins) {
+    plugins[plugin](app);
+  }
+}; // Create module definition for Vue.use()
+
+export default install;
+export { script$9 as Autocomplete, script$8 as Calendar, script$7 as Dropdown, script$6 as InputDate, script$5 as InputNumber, script$4 as Modal, script$3 as Pagination, script$1 as Tab, script$2 as Tabs, script as Toast };
