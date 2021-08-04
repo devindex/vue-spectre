@@ -1,6 +1,7 @@
 <template>
   <section
     class="tab-panel"
+    v-if="!disabled"
     v-show="isActive"
     :aria-hidden="!isActive"
     :id="`tab-${id}`"
@@ -21,6 +22,10 @@ export default {
       type: String,
       required: true,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {

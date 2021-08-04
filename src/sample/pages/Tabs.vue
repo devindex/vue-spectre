@@ -8,7 +8,7 @@
     <dx-tab label="Tab 2">
       <p>Tab content 2</p>
     </dx-tab>
-    <dx-tab label="Tab 3">
+    <dx-tab label="Tab 3" :disabled="true">
       <p>Tab content 3</p>
     </dx-tab>
   </dx-tabs>
@@ -17,25 +17,27 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      code: `<dx-tabs @change="handler">
+const code1 = `<dx-tabs @change="handler">
   <dx-tab label="Tab 1">
     Tab content 1
   </dx-tab>
   <dx-tab label="Tab 2">
     Tab content 2
   </dx-tab>
-  <dx-tab label="Tab 3">
+  <dx-tab label="Tab 3" :disabled="true">
     Tab content 3
   </dx-tab>
-</dx-tabs>`,
+</dx-tabs>`;
+
+export default {
+  data() {
+    return {
+      code: code1,
     };
   },
   methods: {
     handler(args) {
-      console.log(args);
+      // console.log(args);
     },
   },
 }

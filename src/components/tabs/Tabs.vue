@@ -2,7 +2,14 @@
   <div class="tabs-container">
     <ul class="tab" :class="{ 'tab-block': this.block }">
       <li class="tab-item" v-for="tab in tabs" :class="{ active: tab.isActive }">
-        <a href="#" @click.prevent="selectTab(tab.id)">{{ tab.label }}</a>
+        <a
+          href="#"
+          @click.prevent="selectTab(tab.id)"
+          :class="{ 'disabled': tab.disabled }"
+        >{{ tab.label }}</a>
+      </li>
+      <li class="tab-item tab-action" v-if="'action' in $slots">
+        <slot name="action"></slot>
       </li>
     </ul>
     <slot></slot>
@@ -35,7 +42,7 @@ export default {
     },
     selectTab(selectedTabId) {
       const selectedTab = this.findTab(selectedTabId);
-      if (!selectedTab) {
+      if (!selectedTab || selectedTab.disabled) {
         return;
       }
 
@@ -58,8 +65,15 @@ export default {
 <style lang="scss">
 .tab {
   .tab-item {
-    a:focus {
-      box-shadow: none;
+    a {
+      &.disabled {
+        cursor: default;
+        opacity: .5;
+        pointer-events: none;
+      }
+      &:focus {
+        box-shadow: none;
+      }
     }
   }
 }
