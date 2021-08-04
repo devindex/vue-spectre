@@ -1,28 +1,30 @@
 # Vue Spectre
-Spectre.css components and plugins for VueJS
+Spectre.css components and plugins for Vue 3
 
 ## Installation
 
-### npm
+### Add package
 
 ```bash
+# npm
 $ npm i -S @devindex/vue-spectre
-```
-  
-### yarn
 
-```bash
+# yarn
 $ yarn add @devindex/vue-spectre
 ```
 
 ### Usage
 
 ```javascript
-import Vue from 'vue'
-import VueSpectre from '@devindex/vue-spectre'
+import { createApp } from 'vue';
+import VueSpectre from '@devindex/vue-spectre'; // <-- ADD THIS LINE
+import App from './App.vue';
 
-/** Activate plugin **/
-Vue.use(VueSpectre);
+const app = createApp(App);
+
+app.use(VueSpectre, { locale: 'en' });  // <-- ADD THIS LINE
+
+app.mount('#app');
 ```
 
 ## Components
@@ -34,13 +36,15 @@ Vue.use(VueSpectre);
     v-model="value"
     :source="source"
     label="name"
-    track-by="id">
-</dx-autocomplete>
+    track-by="id"
+></dx-autocomplete>
 ```
 
-| Property name | Type | Default | Required |
-| ------------- | ---- | ------- | -------- |
-| source | Function\|Array |  | true |
+#### Properties
+
+| Name | Type | Default | Required |
+| ---- | ---- | ------- | -------- |
+| source | Function,Array |  | true |
 | label | String |  | true (when source is an array of objects) |
 | track-by | String | | true (when source is an array of objects) |
 | placeholder | String | `''` | false |
@@ -54,8 +58,10 @@ Vue.use(VueSpectre);
 | readonly | Boolean | `false` | false |
 | loading | Boolean | `false` | false |
 
-| Event name | Attributes |
-| ---------- | ------ |
+#### Events
+
+| Name | Args |
+| ---- | ---- |
 | select | `(value)` |
 | focus | `(search)` |
 | blur | `(search)` |
@@ -63,26 +69,29 @@ Vue.use(VueSpectre);
 ### Calendar
 
 ```html
-<dx-calendar v-model="date" />
+<dx-calendar v-model="date"></dx-calendar>
 ```
 
-| Property name | Type | Default | Required |
-| ------------- | ---- | ------- | -------- |
+#### Properties
+
+| Name | Type | Default | Required |
+| ---- | ---- | ------- | -------- |
 | min | Date | `null` | false |
 | max | Date | `null` | false |
 | highlights | Array | `[]` | false |
 
-| Event name | Attributes |
-| ---------- | ------ |
+#### Events
+
+| Name | Args |
+| ---- | ---- |
 | select | `(value)` |
 | prev | `()` |
 | next | `()` |
 | month-change | `()` |
 
-| Slots |
-| ---------- |
-| prev-nav |
-| next-nav |
+#### Slots
+
+`prev-nav`, `next-nav`
 
 ### Dropdown
 
@@ -90,33 +99,36 @@ Vue.use(VueSpectre);
 <dx-dropdown
     :items="[]"
     label="name"
-    @select="onSelect">
-    Dropdown
-</dx-dropdown>
+    @select="onSelect"
+>Dropdown</dx-dropdown>
 ```
 
-| Property name | Type | Default | Required |
-| ------------- | ---- | ------- | -------- |
+#### Properties
+
+| Name | Type | Default | Required |
+| ---- | ---- | ------- | -------- |
 | items | Array |  | true |
 | label | String |  | true (when item is an array of objects) |
 | max-height | Number | 300 | false |
 | direction | String | left | false |
 | disabled | Boolean | false | false |
 
-| Event name | Attributes |
-| ---------- | ------ |
+#### Events
+
+| Name | Args |
+| ---- | ---- |
 | select | `(value)` |
 
 ### Inputs
 
 Input date
 ```html
-<dx-input-date v-model="date" />
+<dx-input-date v-model="date"></dx-input-date>
 ```
 
 Input number
 ```html
-<dx-input-number v-model="number" :precision="2" />
+<dx-input-number v-model="number" :precision="2"></dx-input-number>
 ```
 
 ### Modal
@@ -124,13 +136,14 @@ Input number
 ```html
 <dx-modal
     v-model="show"
-    title="Modal">
-    ...
-</dx-modal>
+    title="Modal"
+>Modal content</dx-modal>
 ```
 
-| Property name | Type | Default | Required |
-| ------------- | ---- | ------- | -------- |
+#### Properties
+
+| Name | Type | Default | Required |
+| ---- | ---- | ------- | -------- |
 | title | String |  | false |
 | closable | Boolean | `true` | false |
 | size | String |  | false |
@@ -143,20 +156,29 @@ Input number
     :total="total"
     :limit="limit"
     @paginate="onPaginate"
-
-    :numbers="numbers"/>
-</dx-pagination>
+    :numbers="numbers"
+></dx-pagination>
 ```
+
+#### Properties
+
+| Name | Type | Default | Required |
+| ---- | ---- | ------- | -------- |
+| total | number | `0` | false |
+| limit | number | `20` | false |
+| numbers | number | `11` | false |
+
+#### Events
+
+| Name | Args |
+| ---- | ---- |
+| paginate | `({ total, limit, offset, pages, page })` |
 
 ### Tabs
 
 ```html
-<dx-tabs 
-    :block="false" 
-    @change="onChange">
-    <dx-tab 
-        name="Tab 1"
-        id="custom-id-1">
+<dx-tabs :block="false" @change="onChange">
+    <dx-tab name="Tab 1" id="custom-id-1">
         Tab content 1
     </dx-tab>
     <dx-tab name="Tab 2" id="custom-id-2">
@@ -164,6 +186,30 @@ Input number
     </dx-tab>
 </dx-tabs>
 ```
+
+#### Properties - dx-tabs
+
+| Name | Type | Default | Required |
+| ---- | ---- | ------- | -------- |
+| block | boolean | `false` | false |
+
+#### Events - dx-tabs
+
+| Name | Args |
+| ---- | ---- |
+| change | `({ tab })` |
+
+#### Slots - dx-tabs
+
+`action`
+
+#### Properties - dx-tab
+
+| Name | Type | Default | Required |
+| ---- | ---- | ------- | -------- |
+| label | string |  | true |
+| disabled | boolean | `false` | false |
+
 
 ## License
 
