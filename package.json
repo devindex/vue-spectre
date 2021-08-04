@@ -1,6 +1,6 @@
 {
   "name": "@devindex/vue-spectre",
-  "version": "1.0.0-rc",
+  "version": "1.0.0",
   "description": "Spectre.css components and plugins for VueJS",
   "author": "Sergio Rodrigues <sergio@devindex.com.br>",
   "main": "dist/vue-spectre.ssr.js",
