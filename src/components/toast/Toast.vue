@@ -1,54 +1,72 @@
 <template>
-  <div class="toast-wrapper" v-if="show">
-    <div class="toast" :class="`toast-${type}`">
-      <span>{{ message }}</span>
-      <button class="btn btn-action btn-clear" @click="show = false"></button>
+  <teleport to="body">
+    <div class="toast-wrapper" v-if="visible">
+      <div class="toast" :class="type ? `toast-${type}` : ''">
+        <button class="btn btn-clear float-right" @click="visible = false"></button>
+        <h6 class="toast-title" v-if="title">{{ title }}</h6>
+        <p class="toast-message">{{ message }}</p>
+      </div>
     </div>
-  </div>
+  </teleport>
 </template>
 
 <script>
-  export default {
-    props: {
-      show: {
-        type: Boolean,
-        default: false
-      },
-      type: {
-        type: String,
-        default: ''
-      },
-      message: String
+export default {
+  props: {
+    show: {
+      type: Boolean,
+      default: false
     },
-    methods: {
+    type: {
+      type: String,
+      default: ''
+    },
+    content: {
+      type: [String, Object],
+      default: '',
+    }
+  },
+  data() {
+    return {
+      visible: this.show,
+    };
+  },
+  watch: {
+    show() {
+      this.visible = this.show;
+    },
+  },
+  computed: {
+    parsedContent() {
+      const content = typeof this.content === 'string'
+        ? { message: this.content }
+        : this.content;
 
+      return {
+        title: '',
+        message: '',
+        ...content,
+      };
     },
-    mounted () {
-      this.$nextTick(() => {
-        document.body.appendChild(this.$el);
-      })
+    title() {
+      return this.parsedContent.title;
     },
-    destroyed () {
-      this.$el.remove();
+    message() {
+      return this.parsedContent.message;
     },
   }
+}
 </script>
 
 <style lang="scss">
-  @import '~assets/scss/variables';
+@import "~spectre.css/src/variables";
 
-  .toast-wrapper {
-    position: absolute;
-    top: .5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: $zindex-x + 10;
-    .toast {
-      align-items: center;
-      display: flex;
-    }
-    .btn {
-      margin: 0 0 0 $layout-spacing-sm;
-    }
-  }
+.toast-wrapper {
+  left: 50%;
+  min-width: 10rem;
+  position: absolute;
+  top: .5rem;
+  transform: translateX(-50%);
+  z-index: $zindex-4 + 10;
+}
 </style>

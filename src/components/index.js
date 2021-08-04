@@ -5,3 +5,4 @@ export { InputNumber, InputDate } from './inputs/index';
 export { Modal } from './modal/index';
 export { Pagination } from './pagination/index';
 export { Tabs, Tab } from './tabs/index';
+export { Toast } from './toast/index';

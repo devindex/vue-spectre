@@ -7,7 +7,7 @@ import Modal from './Modal';
 // import Notification from './Notification';
 import Pagination from './Pagination';
 import Tabs from './Tabs';
-// import Toast from './Toast';
+import Toast from './Toast';
 
 export default [
   {
@@ -55,9 +55,9 @@ export default [
     name: 'Tabs',
     component: Tabs,
   },
-  // {
-  //   path: '/toast',
-  //   name: 'Toast',
-  //   component: Toast,
-  // },
+  {
+    path: '/toast',
+    name: 'Toast',
+    component: Toast,
+  },
 ];
