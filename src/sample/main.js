@@ -1,9 +1,9 @@
 import { createApp } from 'vue';
 import VueHighlight from 'vue3-highlightjs';
 import VueSpectre from '../entry';
-import 'spectre.css/dist/spectre.css';
-import 'spectre.css/dist/spectre-exp.css';
-import 'spectre.css/dist/spectre-icons.css';
+import 'spectre.css/src/spectre.scss';
+import 'spectre.css/src/spectre-exp.scss';
+import 'spectre.css/src/spectre-icons.scss';
 import 'highlight.js/styles/atom-one-light.css';
 import App from './App.vue';
 import SampleCode from '@/sample/components/SampleCode.vue';
