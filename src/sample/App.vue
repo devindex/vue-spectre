@@ -2,7 +2,16 @@
   <div class="off-canvas off-canvas-sidebar-show">
     <div class="off-canvas-sidebar">
       <div class="sidebar-content">
-        <h1 class="h3">Elements</h1>
+        <div class="text-center">
+          <img
+            src="@/sample/assets/vue-logo.svg"
+            alt="Vue 3"
+            title="Vue 3"
+            style="width: 5rem"
+          >
+          <h1 class="h3">spectre.css</h1>
+        </div>
+        <div class="divider"></div>
         <a
           class="menu-item"
           v-for="page in pages"
@@ -64,8 +73,12 @@ export default {
   padding: $layout-spacing-lg;
 }
 .sidebar-content .menu-item {
+  color: $primary-color-dark;
   display: block;
   padding: $layout-spacing-sm 0;
+  &:focus {
+    box-shadow: none;
+  }
 }
 .off-canvas {
   .off-canvas-content {
@@ -94,8 +107,8 @@ export default {
   .component-section {
     margin-bottom: $unit-16;
     .section-title {
-      color: $primary-color-dark;
-      font-size: $font-size-lg;
+      color: $dark-color;
+      font-size: $font-size-lg + $layout-spacing-sm;
       font-weight: normal;
     }
     &:last-of-type {
