@@ -1178,7 +1178,7 @@ function createCommonjsModule(fn) {
     };
   },
   watch: {
-    value: function value(newValue) {
+    modelValue: function modelValue(newValue) {
       if (newValue !== this.lastValue) {
         this.lastValue = newValue;
         this.display = this.mask(newValue, true);
@@ -1190,7 +1190,25 @@ function createCommonjsModule(fn) {
   },
   methods: {
     onInput: function onInput(e) {
+      var currentValue = e.target.value; // Get current cursor position
+
+      var position = this.$refs.input.selectionEnd;
       this.refresh(e.target.value);
+      var newValue = this.display;
+
+      if (this.$refs.input === document.activeElement) {
+        // Find next cursor position
+        if (position === currentValue.length) {
+          position = newValue.length;
+        } else if (position > 0 && position <= newValue.length) {
+          if (currentValue.charAt(position - 1) === newValue.charAt(position)) {
+            position += 1;
+          }
+        } // Restore cursor position
+
+
+        this.$refs.input.setSelectionRange(position, position);
+      }
     },
     refresh: function refresh(value) {
       var maskedValue = this.mask(value);
@@ -1260,7 +1278,7 @@ function createCommonjsModule(fn) {
     };
   },
   watch: {
-    value: function value(newValue) {
+    modelValue: function modelValue(newValue) {
       if (newValue !== this.lastValue) {
         this.lastValue = newValue;
         this.display = this.mask(newValue);
