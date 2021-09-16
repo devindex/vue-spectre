@@ -11,7 +11,7 @@
     "dist/*"
   ],
   "scripts": {
-    "serve": "vue-cli-service serve src/sample/main.js",
+    "dev": "vue-cli-service serve src/sample/main.js",
     "build": "cross-env NODE_ENV=production rollup --config build/rollup.config.js",
     "build:ssr": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format cjs",
     "build:es": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format es",
