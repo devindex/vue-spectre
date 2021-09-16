@@ -997,7 +997,25 @@ var __vue_component__$2 = /*#__PURE__*/normalizeComponent({
   },
   methods: {
     onInput: function onInput(e) {
+      var currentValue = e.target.value; // Get current cursor position
+
+      var position = this.$refs.input.selectionEnd;
       this.refresh(e.target.value);
+      var newValue = this.display;
+
+      if (this.$refs.input === document.activeElement) {
+        // Find next cursor position
+        if (position === currentValue.length) {
+          position = newValue.length;
+        } else if (position > 0 && position <= newValue.length) {
+          if (currentValue.charAt(position - 1) === newValue.charAt(position)) {
+            position += 1;
+          }
+        } // Restore cursor position
+
+
+        this.$refs.input.setSelectionRange(position, position);
+      }
     },
     refresh: function refresh(value) {
       var maskedValue = this.mask(value);
@@ -1072,7 +1090,7 @@ var __vue_inject_styles__$3 = undefined;
 var __vue_scope_id__$3 = undefined;
 /* module identifier */
 
-var __vue_module_identifier__$3 = "data-v-499f7f77";
+var __vue_module_identifier__$3 = "data-v-01b6596a";
 /* functional template */
 
 var __vue_is_functional_template__$3 = false;
