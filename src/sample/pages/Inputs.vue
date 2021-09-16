@@ -29,6 +29,12 @@
         <div class="input-group">
           <dx-input-number v-model="number" id="input-number" :precision="2" />
           <input type="text" class="form-input text-center text-gray" :value="number" readonly>
+          <button class="btn btn-primary input-group-btn" @click="randomNumber">
+            <i class="icon icon-refresh"></i>
+          </button>
+          <button class="btn btn-error input-group-btn" @click="number = ''" :disabled="!number">
+            <i class="icon icon-cross"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -57,6 +63,9 @@ export default {
       const date = new Date();
       date.setDate(date.getDate() + Math.round(Math.random() * 100));
       this.date = date.toISOString().substring(0, 10);
+    },
+    randomNumber() {
+      this.number = Math.round(Math.random() * 1000) / 100;
     },
   },
 }
