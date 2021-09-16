@@ -39,7 +39,28 @@ export default {
   },
   methods: {
     onInput(e) {
+      const currentValue = e.target.value;
+
+      // Get current cursor position
+      let position = this.$refs.input.selectionEnd;
+
       this.refresh(e.target.value);
+
+      const newValue = this.display;
+
+      if (this.$refs.input === document.activeElement) {
+        // Find next cursor position
+        if (position === currentValue.length) {
+          position = newValue.length;
+        } else if (position > 0 && position <= newValue.length) {
+          if (currentValue.charAt(position - 1) === newValue.charAt(position)) {
+            position += 1;
+          }
+        }
+
+        // Restore cursor position
+        this.$refs.input.setSelectionRange(position, position);
+      }
     },
     refresh(value) {
       const maskedValue = this.mask(value);
