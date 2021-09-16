@@ -27,7 +27,7 @@ export default {
     };
   },
   watch : {
-    value(newValue) {
+    modelValue(newValue) {
       if (newValue !== this.lastValue) {
         this.lastValue = newValue;
         this.display = this.mask(newValue, true);

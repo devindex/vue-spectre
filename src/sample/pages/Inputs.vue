@@ -9,6 +9,12 @@
         <div class="input-group">
           <dx-input-date v-model="date" id="input-date" />
           <input type="text" class="form-input text-center text-gray" :value="date" readonly>
+          <button class="btn btn-primary input-group-btn" @click="randomDate">
+            <i class="icon icon-refresh"></i>
+          </button>
+          <button class="btn btn-error input-group-btn" @click="date = ''" :disabled="!date">
+            <i class="icon icon-cross"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -45,6 +51,13 @@ export default {
         inputNumber: inputNumberCode,
       },
     }
+  },
+  methods: {
+    randomDate() {
+      const date = new Date();
+      date.setDate(date.getDate() + Math.round(Math.random() * 100));
+      this.date = date.toISOString().substring(0, 10);
+    },
   },
 }
 </script>
