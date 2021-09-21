@@ -1112,7 +1112,9 @@ var script$6 = {
         if (position === currentValue.length) {
           position = newValue.length;
         } else if (position > 0 && position <= newValue.length) {
-          if (currentValue.charAt(position - 1) === newValue.charAt(position)) {
+          const digit = currentValue.charAt(position - 1);
+
+          if (digit !== newValue.charAt(position - 1) && digit === newValue.charAt(position)) {
             position += 1;
           }
         } // Restore cursor position
